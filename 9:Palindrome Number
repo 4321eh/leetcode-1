@@ -1,0 +1,22 @@
+//https://leetcode.com/problems/palindrome-number/
+
+
+
+// 注意overflow
+
+
+class Solution {
+public:
+    bool isPalindrome(int x) {
+        if (x < 0) return false;
+        long long org = x;
+        long long reverse = 0;
+        while (org) {
+            reverse *= 10;
+            reverse += org % 10;
+            org /= 10;
+        }
+        org = x;
+        return org == reverse;
+    }
+};
