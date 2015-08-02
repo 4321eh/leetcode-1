@@ -1,0 +1,41 @@
+
+
+//https://leetcode.com/problems/two-sum/
+
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        vector<int> temp = nums;
+        sort(temp.begin(), temp.end());
+        int first = 0;
+        int last = temp.size() - 1;
+        while (first<last) {
+            if (temp[first] + temp[last] > target) {
+                last -= 1;
+                continue;
+            } 
+            if (temp[first] + temp[last] < target) {
+                first += 1;
+                continue;
+            }
+            break;
+        }
+        for (int i = 0; i < nums.size(); ++i) {
+            if (temp[first] == nums[i]) {
+                first = i + 1;
+                break;
+            }
+        }
+        for (int i = nums.size() - 1; i >= 0; --i) {
+            if (temp[last] == nums[i]) {
+                last = i + 1;
+                break;
+            }
+        }
+        vector<int> result;
+        result.push_back(first);
+        result.push_back(last);
+        sort(result.begin(), result.end());
+        return result;
+    }
+};
