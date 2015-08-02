@@ -1,0 +1,35 @@
+// https://leetcode.com/problems/string-to-integer-atoi/
+
+
+
+// 妈的，这种题目，最好还是问面试官，各种情况如何外理，弄的清清楚楚，再来过，我交了好几次，才ac的。
+
+
+
+class Solution {
+public:
+    int myAtoi(string str) {
+        string temp;
+        for (int i = 0; i < str.length(); ++i) {
+            if (' ' == str[i] && "" == temp)
+                continue;
+            temp += str[i];
+        }
+        if ("-2147483648" == temp) 
+            return -2147483648;
+            
+        long long result = 0;
+        for (int i = 0; i < temp.length(); ++i) {
+            if (0 == i && ('-' == temp[i] || '+' == temp[i]))
+                continue;
+            if (temp[i] < '0' || temp[i] > '9') break;
+            result *= 10;
+            result += temp[i] - '0';
+            if (result > 2147483647) {
+                return ('-' == temp[0] ? -2147483648: 2147483647);
+            }
+        }
+        result = ('-' == temp[0] ? -1: 1) * result;
+        return result;
+    }
+};
