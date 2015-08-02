@@ -1,0 +1,30 @@
+
+
+// https://leetcode.com/problems/zigzag-conversion/
+
+// 这个题，TL了几次，没有充分想好如何做，还一开始想用个公式来推，还没想到最上面一行和最下面一行的不同的地方就开始动手写了。
+
+class Solution {
+public:
+    string convert(string s, int numRows) {
+        if (1 == numRows) return s; 
+        string result;
+        for (int i = 0; i < numRows; ++i) {
+            int j = i;
+            bool flag = false; 
+            while (j < s.length()) {
+                result += s[j];
+                int diff = 2 * (numRows - i) - 2;
+                if (flag) {
+                    diff = 2 * (i + 1) - 2;
+                }
+                flag = not flag;
+                if (0 == i || numRows == i + 1) {
+                    diff = 2 * numRows - 2;
+                }
+                j += diff;
+            }
+        }
+        return result;
+    }
+};
