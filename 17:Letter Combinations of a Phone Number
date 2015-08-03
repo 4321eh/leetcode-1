@@ -1,0 +1,46 @@
+
+//https://leetcode.com/problems/letter-combinations-of-a-phone-number/
+
+
+
+
+// 经典的进制数做法，用一个remaider来保存进位。
+
+//wa了一次，没有考虑到digits == “”的情况，输出了[""],应是要输出[]
+
+
+class Solution {
+public:
+    vector<string> letterCombinations(string digits) {
+        vector<string> results;
+        if (digits.size() < 1) return results;
+        
+        map<char, vector<char> > dir;
+        string letter[] = {"abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+        for (int i = 2; i < 10; ++i) {
+            vector<char> v;
+            for (int j = 0; j < letter[i - 2].size(); ++j) {
+                v.push_back(letter[i - 2][j]);
+            }
+            dir['0' + i] = v;
+        }
+        vector<int> comb(digits.size(), 0);
+        
+        while (true) {
+            string result;
+            for (int i = 0; i < comb.size(); ++i) {
+                result += dir[digits[i]][comb[i]];
+            } 
+            results.push_back(result);
+            int remainder = 1;
+            for (int i = 0; i < comb.size(); ++i) {
+                comb[i] += remainder;
+                remainder = comb[i] / dir[digits[i]].size();
+                comb[i] %= dir[digits[i]].size();
+            }
+            if (remainder)
+                break;
+        }
+        return results;
+    }
+};
