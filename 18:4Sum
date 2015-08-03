@@ -1,0 +1,51 @@
+
+
+//https://leetcode.com/problems/4sum/
+
+// 直过。。。注意不要每次都调用make_vector
+
+class Solution {
+public:
+    vector<int> make_vector(int v1, int v2, int v3, int v4) {
+        vector<int> result(4, 0);
+        result[0] = v1;
+        result[1] = v2;
+        result[2] = v3;
+        result[3] = v4;
+        return result;
+    }
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+        vector<vector<int> > result;
+        sort(nums.begin(), nums.end());
+        for (int i = 0; i < nums.size(); ++i) {
+            for (int j = i + 1; j < nums.size(); ++j) {
+                int first = j + 1;
+                int last = nums.size() - 1;
+                while (first < last) {
+                    if (nums[i] + nums[j] + nums[first] + nums[last] == target) {
+                        bool flag = true;
+                        for (int k = 0; k < result.size(); ++k) {
+                            if (result[k][0] == nums[i] && result[k][1] == nums[j] && 
+                            result[k][2] == nums[first] && result[k][3] == nums[last]) {
+                                flag = false;
+                                break;
+                            }
+                        }
+                        if (flag) {
+                            result.push_back(make_vector(nums[i], nums[j], nums[first], nums[last]));
+                        }
+                        first += 1;
+                        last -= 1;
+                        continue;
+                    }
+                    if (nums[i] + nums[j] + nums[first] + nums[last] < target) {
+                        first += 1;
+                        continue;
+                    }
+                    last -= 1;
+                }
+            }
+        }
+        return result;
+    }
+};
