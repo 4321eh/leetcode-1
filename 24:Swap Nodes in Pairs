@@ -1,0 +1,30 @@
+//https://leetcode.com/problems/swap-nodes-in-pairs/
+
+
+// 加一个头指针，可真好外理！！！！
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* swapPairs(ListNode* head) {
+        ListNode* p = new ListNode(0);
+        p->next = head;
+        ListNode* newHead = p;
+        while (p->next && p->next->next) {
+            ListNode* temp = p->next;
+            p->next = p->next->next;
+            temp->next = temp->next->next;
+            p->next->next = temp;
+            p = temp;
+        }
+        return newHead->next;
+    }
+};
