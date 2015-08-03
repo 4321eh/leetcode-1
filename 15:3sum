@@ -1,0 +1,70 @@
+
+//https://leetcode.com/problems/3sum/
+
+
+//囧，这个题，弄了20分钟。。。都是TLE，
+//原因是我写了一个make_vector,最后不是每次make_vector,而是用同一个vector，就没超时了。
+
+class Solution {
+public:
+    vector<int> make_vector(int i, int j ,int k) {
+        vector<int> result(3, 0);
+        result[0] = i;
+        result[1] = j;
+        result[2] = k;
+        return result;
+    }
+    vector<vector<int> > threeSum(vector<int>& nums) {
+        
+        
+        set<vector<int> > remove_duplica;
+        vector<vector<int> > result;
+        
+        if (nums.size() < 3) return result;
+        
+        sort(nums.begin(), nums.end());
+        
+        vector<int> temp(3, 0);
+        
+        int target = 0;
+        for (int i = 0; i < nums.size(); ++i) {
+            int first = i + 1;
+            int last = nums.size() - 1;
+            while (first < last) {
+                if (nums[i] + nums[first] + nums[last] == target) {
+                    remove_duplica.insert(make_vector(nums[i], nums[first], nums[last]));
+                    /*
+                    bool flag = true;
+                    temp[0] = nums[i];
+                    temp[1] = nums[first];
+                    temp[2] = nums[last];
+                    for (int j = 0; j < result.size(); ++j) {
+                        if (temp[0] == result[j][0] && temp[1] == result[j][1] && temp[2] == result[j][2]) {
+                            flag = false;
+                            break;
+                        }
+                    }
+                    if (flag)
+                        result.push_back(temp);
+                    */
+                    first += 1;
+                    last -= 1;
+                    continue;
+                }
+                if (nums[i] + nums[first] + nums[last] < target) {
+                    first += 1;
+                    continue;
+                }
+                last -= 1;
+            }
+        }
+        
+        
+        
+        for (set<vector<int> >::iterator it = remove_duplica.begin(); it != remove_duplica.end(); ++it) {
+            result.push_back(*it);
+        }
+        
+        return result;
+    }
+};
