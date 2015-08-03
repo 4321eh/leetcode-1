@@ -1,0 +1,30 @@
+
+
+
+
+
+
+
+//https://leetcode.com/problems/generate-parentheses/
+
+
+class Solution {
+public:
+    void helper(vector<string>& results, string result, int left, int right) {
+        if (0 == left && 0 == right && result.length() > 0) {
+            results.push_back(result);
+            return;
+        }
+        if (left > 0) {
+            helper(results, result + "(", left - 1, right);
+        }
+        if (right > 0 && left < right) { //// 不能left <= right的。要举例啊！！！
+            helper(results, result + ")", left, right - 1); ////////傻傻的失误把这写成了+1
+        }
+    }
+    vector<string> generateParenthesis(int n) {
+        vector<string> results;
+        helper(results, string(), n, n);
+        return results;
+    }
+};
