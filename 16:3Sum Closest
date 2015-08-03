@@ -1,0 +1,39 @@
+
+//https://leetcode.com/problems/3sum-closest/
+
+
+//没看题目，wa了一次，以为是找最近的距离的。
+
+
+class Solution {
+public:
+    long long abs(long long x) {
+        if (x < 0) return -x;
+        return x;
+    }
+    int threeSumClosest(vector<int>& nums, int target) {
+        long long result = 2147483647;
+        sort(nums.begin(), nums.end());
+        int closest = 2147483647;
+        for (int i = 0; i < nums.size(); ++i) {
+            int first = i + 1;
+            int last = nums.size() - 1;
+            while (first < last) {
+                long long sum = nums[i] + nums[first] + nums[last];
+                if (sum == target)
+                    return target;
+                if (closest > abs(sum - target)) {
+                    result = sum;
+                    closest = abs(sum - target);
+                }
+                if (sum > target) {
+                    last -= 1;
+                    continue;
+                }
+                first += 1;
+            }
+        }
+        return result;
+    }
+};
+
