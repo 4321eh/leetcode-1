@@ -1,0 +1,23 @@
+
+
+// https://leetcode.com/problems/container-with-most-water/
+
+//一开始理解错题意了。。。。wa了几次。
+
+class Solution {
+public:
+    int maxArea(vector<int>& height) {
+        int result = 0;
+        int max_left_index = 0;
+        int max_right_index = height.size() - 1;
+        while (max_left_index < max_right_index) {
+            result = max(result, min(height[max_left_index], height[max_right_index]) * (max_right_index - max_left_index));
+            if (height[max_left_index] > height[max_right_index]) {
+                max_right_index -= 1;
+                continue;
+            }
+            max_left_index += 1;
+        }
+        return result;
+    }
+};
