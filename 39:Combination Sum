@@ -1,0 +1,30 @@
+
+//https://leetcode.com/problems/combination-sum/
+
+
+
+//就是可重复的排列
+
+
+class Solution {
+public:
+    void helper(vector<vector<int> >& results, vector<int> result, int k, vector<int>& candidates, int target) {
+        if (0 == target) {
+            results.push_back(result);
+            return;
+        }
+        if (k == candidates.size() || target < 0)
+            return;
+        for (int i = k; i < candidates.size(); ++i) {
+            vector<int> temp = result;
+            temp.push_back(candidates[i]);
+            helper(results, temp, i , candidates, target - candidates[i]);
+        }
+    }
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        vector<vector<int> > results;
+        sort(candidates.begin(), candidates.end());
+        helper(results, vector<int>(), 0, candidates, target);
+        return results;
+    }
+};
