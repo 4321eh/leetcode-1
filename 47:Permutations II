@@ -1,0 +1,40 @@
+//https://leetcode.com/problems/permutations-ii/
+
+
+//记住了：以后面刚加进来一样的不能换。
+
+
+
+class Solution {
+public:
+    void swap(int& a, int& b) {
+        int temp = a;
+        a = b;
+        b = temp;
+    }
+    void helper(vector<vector<int> >& results, int k, vector<int>& nums) {
+        if (nums.size() == k) {
+            results.push_back(nums);
+            return;
+        }
+        for (int i = k; i < nums.size(); ++i) {
+            bool flag = false;
+            for (int j = k; j < i; ++j) {
+                if (nums[i] == nums[j]) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (flag) 
+                continue;
+            swap(nums[i], nums[k]);
+            helper(results, k + 1, nums);
+            swap(nums[i], nums[k]);
+        }
+    }
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+        vector<vector<int> > results;
+        helper(results, 0, nums);
+        return results;
+    }
+};
