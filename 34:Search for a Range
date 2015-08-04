@@ -1,0 +1,39 @@
+//https://leetcode.com/problems/search-for-a-range/
+
+
+// 写了一个二分，居然错写成了first < last了, 真是。。。
+//
+//
+
+
+class Solution {
+public:
+    int helper(vector<int>& nums, int first, int last, int target, bool is_left) {
+        while (first <= last) {
+            int mid = (first + last) / 2;
+            if (nums[mid] == target) {
+                if (is_left) {
+                    last = mid - 1;
+                } else {
+                    first = mid + 1;
+                }
+                int most = helper(nums, first, last, target, is_left);
+                if (-1 != most)
+                    return most;
+                return mid;
+            }
+            if (nums[mid] > target) {
+                last = mid - 1;
+                continue;
+            }
+            first = mid + 1;
+        }
+        return -1;
+    }
+    vector<int> searchRange(vector<int>& nums, int target) {
+        vector<int> result;
+        result.push_back(helper(nums, 0, nums.size() -1, target, true));
+        result.push_back(helper(nums, 0, nums.size() -1, target, false));
+        return result;
+    }
+};
