@@ -1,0 +1,44 @@
+//https://leetcode.com/problems/substring-with-concatenation-of-all-words/
+
+
+
+
+//
+//这个题错的挺多的：
+//首先是思路，没有注意到words中有重复的元素的。要用一个map来转换的！
+//1：是没有在下面 34行加 dir.find(substr) == dir.end() ，导致。。。
+//2：没有在下面28号加i < s.length() - words.size() * word_length + 1，导致超时
+//
+
+
+
+
+
+class Solution {
+public:
+    vector<int> findSubstring(string s, vector<string>& words) {
+        vector<int> result;
+        if (words.size() < 1 || s.length() < 1) return result; 
+        map<string, int> dir, temp;
+        
+        for (int i = 0; i < words.size(); ++i)
+            dir[words[i]] += 1;
+        
+        int word_length = words[0].length();
+        
+        for (int i = 0; i < s.length() && i < s.length() - words.size() * word_length + 1; ++i) {
+            temp.clear();
+            int count = 0;
+            for (int j = i; j < s.length(); j += word_length) {
+                string substr = s.substr(j, word_length);
+                temp[substr] += 1;
+                if (substr.length() != word_length || dir.find(substr) == dir.end() || temp[substr] > dir[substr])
+                    break;
+                count += 1;
+            }
+            if (words.size() == count)
+                result.push_back(i);
+        }
+        return result;
+    }
+};
