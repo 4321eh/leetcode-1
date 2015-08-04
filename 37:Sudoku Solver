@@ -1,0 +1,60 @@
+//https://leetcode.com/problems/sudoku-solver/
+
+
+//最粗心的地方：把dot_location记录成了不是dot的！！！！！！！！！！！！！！！！
+
+class Solution {
+public:
+    void solveSudoku(vector<vector<char>>& board) {
+        if (board.size() != 9 || board[0].size() !=9) return;
+        vector<pair<int, int> > dot_location;
+        vector<set<char> > row_dir(9, set<char>());
+        vector<set<char> > col_dir(9, set<char>());
+        vector<set<char> > cel_dir(9, set<char>());
+        for (int i = 0; i < 9; ++i) {
+            for (int j = 0; j < 9; ++j) {
+                char c = board[i][j];
+                if ('.' == c) {
+                    dot_location.push_back(make_pair(i, j));//
+                    continue;
+                }
+                row_dir[i].insert(c);
+                col_dir[j].insert(c);
+                cel_dir[3 * (i / 3) + j / 3].insert(c);
+            }
+        }
+        int pos = 0;
+        while (pos >= 0) {
+            int i = dot_location[pos].first;
+            int j = dot_location[pos].second;
+            int k = 3 * (i / 3) + j / 3;
+            char c = board[i][j];
+            if ('.' != c) {
+                row_dir[i].erase(c);
+                col_dir[j].erase(c);
+                cel_dir[k].erase(c);
+            }
+            for (char next = ('.' == c)?'1':c + 1; next <= '9'; ++next) {
+                if (row_dir[i].find(next) != row_dir[i].end())
+                    continue;
+                if (col_dir[j].find(next) != col_dir[j].end())
+                    continue;
+                if (cel_dir[k].find(next) != cel_dir[k].end())
+                    continue;
+                board[i][j] = next;
+                row_dir[i].insert(next);
+                col_dir[j].insert(next);
+                cel_dir[k].insert(next);
+                break;
+            }
+            if (c == board[i][j]) {
+                board[i][j] = '.';
+                pos -= 1;
+                continue;
+            }
+            pos += 1;
+            if (pos == dot_location.size())
+                break;
+        }
+    }
+};
