@@ -1,0 +1,35 @@
+//https://leetcode.com/problems/divide-two-integers/
+
+
+//没注意到溢出，和负/负的情况。后面的那个是很二的错
+
+
+class Solution {
+public:
+    int divide(int dividend, int divisor) {
+        long long result = 0;
+        long long d1 = dividend;
+        long long d2 = divisor;
+        int flag = 1;
+        if (d1 < 0) {
+            d1 = -d1;
+            flag *= -1;
+        }
+        if (d2 < 0) {
+            d2 = -d2;
+            flag *= -1;
+        }
+        while (d1 >= d2) {
+            long long current = 1;
+            while (d1 >= d2 * (current << 1)) {
+                current <<= 1;
+            }
+            result += current;
+            d1 -= current * d2;
+        }
+        result *= flag;
+        if (result < -2147483648 || result > 2147483647)
+            return 2147483647;
+        return result;
+    }
+};
