@@ -1,0 +1,29 @@
+//https://leetcode.com/problems/search-in-rotated-sorted-array/
+
+
+//想好是写递归，还是写循环，本来是想写循环的，写着写着就成了递归。。。
+
+
+
+class Solution {
+public:
+    int helper(vector<int>& nums, int first, int last, int target) {
+        int result = -1;
+        if (first <= last) {
+            int mid = (first + last) / 2;
+            if (nums[mid] == target)
+                return mid;
+            if (nums[first] > nums[mid] || nums[mid] > target) 
+                result = helper(nums, first, mid - 1, target);
+            if (-1 != result) return result;
+            
+            if (nums[mid] > nums[last] || nums[mid] < target)
+                result = helper(nums, mid + 1, last, target);
+            if (-1 != result) return result;
+        }
+        return result;
+    }
+    int search(vector<int>& nums, int target) {
+        return helper(nums, 0, nums.size() - 1, target);
+    }
+};
