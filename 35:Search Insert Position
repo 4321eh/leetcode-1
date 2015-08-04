@@ -1,0 +1,36 @@
+//https://leetcode.com/problems/search-insert-position/
+
+
+
+// 这个题，做了好久啊！！！！wa了好几次
+
+
+// 没能一下子找到问题的关键在于 mid 等于 first, last中的一个时，而又first <= mid <= last，因为得解
+
+class Solution {
+public:
+    int searchInsert(vector<int>& nums, int target) {
+        int first = 0;
+        int last = nums.size() - 1;
+        while (first <= last) {
+            int mid = (first + last) / 2;
+            if (nums[mid] == target)
+                return mid;
+            if (first == mid || last == mid) {
+                if (nums[last] < target)
+                    return last + 1;
+                if (nums[mid] < target)
+                    return mid + 1;
+                if (nums[first] < target)
+                    return first + 1;
+                return first;
+            }
+            if (nums[mid] > target) {
+                last = mid - 1;
+                continue;
+            }
+            first = mid + 1;
+        }
+    }
+};
+
