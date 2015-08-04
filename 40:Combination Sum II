@@ -1,0 +1,42 @@
+//https://leetcode.com/problems/combination-sum-ii/
+
+//要剪掉一个大枝，不然过不了关。如下代码所示
+
+
+class Solution {
+public:
+    void helper(vector<vector<int> >& results, vector<int> result, int k, vector<int>& candidates, int target) {
+        if (0 == target) {
+            for (int i = 0; i < results.size(); ++i) {
+                if (results[i].size() != result.size())
+                    continue;
+                bool flag = false;
+                for (int j = 0; j < result.size(); ++j) {
+                    if (result[j] != results[i][j]) {
+                        flag = true;
+                        break;
+                    }
+                }
+                if (not flag)
+                    return;
+            }
+            results.push_back(result);
+            return;
+        }
+        if (target < 0)
+            return;
+        if (target < candidates[k])///////////////////////////////////////////////////////////////////
+            return;
+        for (int i = k; i < candidates.size(); ++i) {
+            vector<int> temp = result;
+            temp.push_back(candidates[i]);
+            helper(results, temp, i + 1, candidates, target - candidates[i]);
+        }
+    }
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        vector<vector<int> > results;
+        sort(candidates.begin(), candidates.end());
+        helper(results, vector<int>(), 0, candidates, target);
+        return results;
+    }
+};
