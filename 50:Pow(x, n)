@@ -1,0 +1,43 @@
+
+//https://leetcode.com/problems/powx-n/
+
+
+//这个题就显得我 too young， too simple了
+
+// 没考虑，正负，溢出，没想清while(n > 1) 还是 while(n)....
+
+class Solution {
+public:
+    double myPow(double x, int n1) {
+        long long n = n1;
+        
+        if (0 == n) return 1;
+        bool isNagaN = false;
+        if (n < 0) {
+            n = -n;
+            isNagaN = true;
+        }
+        int flag = 1;
+        /*
+        if (x < 0) {
+            x = -x;
+            flag = n1 % 2 ? -1: 1; //错过。。
+        }
+        */
+        double result = 1;
+        while (n > 1) {
+            if (n & 1)
+                result *= x; // 错过。
+            if (n >> 1)
+                x *= x;
+            n >>= 1;
+        }
+        result *= x;
+        
+        if (isNagaN) {
+            result = 1 / result;
+        }
+        result *= flag;
+        return result;
+    }
+};
