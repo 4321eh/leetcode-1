@@ -1,0 +1,36 @@
+
+//https://leetcode.com/problems/next-permutation/
+
+
+//好莫名的就好了。。。之前一直是wa
+
+
+//是有个算法的。
+
+
+class Solution {
+public:
+    void reverse(vector<int>& nums, int first, int last) {
+        while (first < last) 
+            nums[first++]^=nums[last--]^=nums[first]^=nums[last];
+    }
+    void nextPermutation(vector<int>& nums) {
+        if (nums.size() < 2) return;
+        int first_reduce = nums.size() - 2;
+        while (first_reduce >=0 && nums[first_reduce] >= nums[first_reduce + 1]) {
+            first_reduce -= 1;
+        }
+        if (first_reduce < 0) {
+            reverse(nums, 0, nums.size() - 1);
+            return;
+        }
+        int first_high = nums.size() - 1;
+        while (true) {
+            if (nums[first_high] > nums[first_reduce])
+                break;
+            first_high -= 1;
+        }
+        nums[first_reduce]^=nums[first_high]^=nums[first_reduce]^=nums[first_high];
+        reverse(nums, first_reduce + 1, nums.size() - 1);
+    }
+};
