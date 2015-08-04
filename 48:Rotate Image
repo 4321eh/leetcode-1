@@ -1,0 +1,30 @@
+// https://leetcode.com/problems/rotate-image/
+
+
+// wa了一次，忘了matrix是二维矩阵了，在下面13行，直接matrix[i]与matrix[j]交换了。
+
+
+
+class Solution {
+public:
+    void t(vector<vector<int> >& matrix) {
+        for (int i = 0; i < matrix.size(); ++i) {
+            for (int j = i + 1; j < matrix[i].size(); ++j) {
+                matrix[i][j] ^= matrix[j][i] ^= matrix[i][j] ^= matrix[j][i];
+            }
+        }
+    }
+    void leftRight(vector<vector<int> >& matrix) {
+        for (int i = 0; i < matrix.size(); ++i) {
+            int first = 0;
+            int last = matrix[i].size() - 1;
+            while (first < last) {
+                matrix[i][first++] ^= matrix[i][last--] ^= matrix[i][first] ^= matrix[i][last];
+            }
+        }
+    }
+    void rotate(vector<vector<int>>& matrix) {
+        t(matrix);
+        leftRight(matrix);
+    }
+};
