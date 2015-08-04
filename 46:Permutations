@@ -1,0 +1,32 @@
+//https://leetcode.com/problems/permutations/
+
+
+//有时 a ^= b ^= a ^= b不管用！！！！！！！！！！！这样wa过一次。可能与编译器有关
+
+
+class Solution {
+public:
+    void swap(int& a, int& b) {
+        int temp = a;
+        a = b;
+        b = temp;
+    }
+    void helper(vector<vector<int> >& results, int k , vector<int>& nums) {
+        if (k ==  nums.size()) {
+            results.push_back(nums);
+            return;
+        }
+        for (int i = k; i < nums.size(); ++i) {
+            //nums[i] ^= nums[k] ^= nums[i] ^= nums[k];
+            swap(nums[i], nums[k]);
+            helper(results, k + 1, nums);
+            swap(nums[i], nums[k]);
+            //nums[i] ^= nums[k] ^= nums[i] ^= nums[k];
+        }
+    }
+    vector<vector<int>> permute(vector<int>& nums) {
+        vector<vector<int> > results;
+        helper(results, 0, nums);
+        return results;
+    }
+};
