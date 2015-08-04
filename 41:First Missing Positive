@@ -1,0 +1,26 @@
+
+//https://leetcode.com/problems/first-missing-positive/
+
+
+
+// 对于最后面num.size() + 1，要注意到nums.size()是0和刚好都满的情况。
+
+
+class Solution {
+public:
+    int firstMissingPositive(vector<int>& nums) {
+        vector<bool> visited(nums.size() + 1, false);
+        
+        for (int i = 0; i < nums.size(); ++i) {
+            if (nums[i] >= visited.size())
+                continue;
+            visited[nums[i]] = true;
+        }
+        for (int i = 1; i < visited.size(); ++i) {
+            if (not visited[i]) {
+                return i;
+            }
+        }
+        return nums.size() + 1;
+    }
+};
