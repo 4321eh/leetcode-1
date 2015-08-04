@@ -1,0 +1,26 @@
+//https://leetcode.com/problems/anagrams/
+
+
+//首先是看清楚题目先，然后，再是弄乱了vector的size()与string的length()， 不是不知道，是常常忘了。
+
+
+
+class Solution {
+public:
+    vector<string> anagrams(vector<string>& strs) {
+        map<string, int> dir;
+        for (int i = 0; i < strs.size(); ++i) {
+            string s = strs[i];
+            sort(s.begin(), s.end());
+            dir[s] += 1;
+        }
+        vector<string> result;
+        for (int i = 0; i < strs.size(); ++i) {
+            string s = strs[i];
+            sort(s.begin(), s.end());
+            if (dir[s] > 1)
+                result.push_back(strs[i]);
+        }
+        return result;
+    }
+};
