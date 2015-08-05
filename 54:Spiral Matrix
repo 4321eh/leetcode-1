@@ -1,0 +1,28 @@
+//https://leetcode.com/problems/spiral-matrix/
+
+
+//写得最顺的一次，可惜，把x与y的方向给弄错了。。。wa了一次。
+
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        vector<int> result;
+        if (matrix.size() < 1 || matrix[0].size() < 1) return result;
+        int len[] = {matrix[0].size(), matrix.size() - 1};
+        int x_dir[] = {1, 0, -1, 0};
+        int y_dir[] = {0, 1, 0, -1};
+        int step = 0;
+        int x = -1;
+        int y = 0;
+        while (result.size() < matrix.size() * matrix[0].size()) {
+            for (int i = 0; i < len[step % 2]; ++i) {
+                x += x_dir[step % 4];
+                y += y_dir[step % 4];
+                result.push_back(matrix[y][x]);
+            }
+            len[step % 2] -= 1;
+            step += 1;
+        }
+        return result;
+    }
+};
