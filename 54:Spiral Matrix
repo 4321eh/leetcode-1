@@ -1,7 +1,7 @@
 //https://leetcode.com/problems/spiral-matrix/
 
 
-//写得最顺的一次，可惜，把x与y的方向给弄错了。。。wa了一次。
+//写得最顺的一次，可惜，把x与y的方向给弄错了。。。wa了一次。。。也是最怕连方向也弄错了。
 
 class Solution {
 public:
