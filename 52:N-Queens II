@@ -1,0 +1,46 @@
+//https://leetcode.com/problems/n-queens-ii/
+
+
+
+//直接用i的。
+
+
+class Solution {
+public:
+    int totalNQueens(int n) {
+        return solveNQueens(n);
+    }
+    int solveNQueens(int n) {
+        int result = 0;
+        if (n < 1) return result;
+        vector<int> dir(n, -1);
+        int count = 0;
+        while (count >= 0) {
+            bool flag = false;
+            for (int i = dir[count] + 1; i < n; ++i) {
+                bool same = false;
+                for (int j = 0; j < count; ++j) {
+                    if (dir[j] == i || i - dir[j] == count - j || i - dir[j] == j - count) {
+                        same = true;
+                        break;
+                    }
+                }
+                if (same)
+                    continue;
+                dir[count] = i;
+                flag = true;
+                break;
+            }
+            if (not flag || count + 1 == n) {
+                if (flag) {
+                    result += 1;
+                }
+                dir[count] = -1;
+                count -= 1;
+                continue;
+            }
+            count += 1;
+        }
+        return result;
+    }
+};
