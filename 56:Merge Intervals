@@ -1,0 +1,37 @@
+//https://leetcode.com/problems/merge-intervals/
+
+
+//好吧，copare那里是要用static的。。。
+
+
+/**
+ * Definition for an interval.
+ * struct Interval {
+ *     int start;
+ *     int end;
+ *     Interval() : start(0), end(0) {}
+ *     Interval(int s, int e) : start(s), end(e) {}
+ * };
+ */
+class Solution {
+public:
+    static bool compare2(Interval i1, Interval i2) {
+        return i1.start < i2.start;
+    }
+    vector<Interval> merge(vector<Interval>& intervals) {
+        if (intervals.size() < 2) return intervals;
+        sort(intervals.begin(), intervals.end(), compare2);
+        vector<Interval> result;
+        Interval newInterval = intervals[0];
+        for (int i = 1; i < intervals.size(); ++i) {
+            if (newInterval.end < intervals[i].start) {
+                result.push_back(newInterval);
+                newInterval = intervals[i];
+                continue;
+            }
+            newInterval.end = max(newInterval.end, intervals[i].end);
+        }
+        result.push_back(newInterval);
+        return result;
+    }
+};
