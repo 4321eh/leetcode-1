@@ -1,0 +1,49 @@
+//https://leetcode.com/problems/n-queens/
+
+
+//这种类型的题，记得在一开始进循环就要初始化位置的值，如第17到第19行。
+//另也有一个bug就是36行里面的判断，本来37行里面是没有flag的，但应要加上！！！很难发现的bug
+
+
+class Solution {
+public:
+    vector<vector<string>> solveNQueens(int n) {
+        vector<vector<string> > results;
+        if (n < 1) return results;
+        vector<string> result(n, string(n, '.'));
+        vector<int> dir(n, -1);
+        int count = 0;
+        while (count >= 0) {
+            bool flag = false;
+            if (-1 != dir[count]) {
+                result[count][dir[count]] = '.';
+            }
+            for (int i = dir[count] + 1; i < n; ++i) {
+                bool same = false;
+                for (int j = 0; j < count; ++j) {
+                    if (dir[j] == i || i - dir[j] == count - j || i - dir[j] == j - count) {
+                        same = true;
+                        break;
+                    }
+                }
+                if (same)
+                    continue;
+                dir[count] = i;
+                result[count][i] = 'Q';
+                flag = true;
+                break;
+            }
+            if (not flag || count + 1 == n) {
+                if (flag && count + 1 == n) {
+                    results.push_back(result);
+                    result[count][dir[count]] = '.';
+                }
+                dir[count] = -1;
+                count -= 1;
+                continue;
+            }
+            count += 1;
+        }
+        return results;
+    }
+};
