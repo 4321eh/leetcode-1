@@ -47,3 +47,48 @@ public:
         return results;
     }
 };
+
+//另一个小改，更易理解！
+
+class Solution {
+public:
+    vector<vector<string>> solveNQueens(int n) {
+        vector<vector<string> > results;
+        if (n < 1) return results;
+        vector<string> result(n, string(n, '.'));
+        vector<int> dir(n, -1);
+        int count = 0;
+        while (count >= 0) {
+            bool flag = false;
+            if (-1 != dir[count]) {
+                result[count][dir[count]] = '.';
+            }
+            for (int i = dir[count] + 1; i < n; ++i) {
+                bool same = false;
+                for (int j = 0; j < count; ++j) {
+                    if (dir[j] == i || i - dir[j] == count - j || i - dir[j] == j - count) {
+                        same = true;
+                        break;
+                    }
+                }
+                if (same)
+                    continue;
+                dir[count] = i;
+                result[count][i] = 'Q';
+                flag = true;
+                break;
+            }
+            if (not flag || count + 1 == n) {
+                if (flag) {
+                    results.push_back(result);
+                    result[count][dir[count]] = '.';
+                }
+                dir[count] = -1;
+                count -= 1;
+                continue;
+            }
+            count += 1;
+        }
+        return results;
+    }
+};
