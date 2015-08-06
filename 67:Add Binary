@@ -13,7 +13,7 @@ public:
         while (first < last) {
             char temp = s[first];
             s[first++]= s[last];
-            s[last++] = temp;
+            s[last++] = temp; ///////////////////////////////////////////这里是--的
         }
     }
     string addBinary(string a, string b) {
