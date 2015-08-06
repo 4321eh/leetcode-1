@@ -1,0 +1,34 @@
+//https://leetcode.com/problems/combinations/
+
+
+//有过一个wa很长时间，这个组合，写得。。。
+
+
+class Solution {
+public:
+    void helper(vector<vector<int> >& results, vector<int> result, int i, int n, int k) {
+        if (result.size() == k) {
+            results.push_back(result);
+            return;
+        }
+        if (i > n) return;
+        helper(results, result, i + 1, n, k);
+        result.push_back(i);
+        helper(results, result, i + 1, n, k);
+        return;
+        
+        /*
+        for (int j = i; j <= n; ++j) {
+            vector<int> temp = result;
+            helper(results, temp, j + 1, n , k);
+            temp.push_back(j);
+            helper(results, temp, j + 1, n, k);
+        }
+        */
+    }
+    vector<vector<int>> combine(int n, int k) {
+        vector<vector<int> > results;
+        helper(results, vector<int>(), 1, n, k);
+        return results;
+    }
+};
