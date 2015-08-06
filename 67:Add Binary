@@ -1,0 +1,44 @@
+//https://leetcode.com/problems/add-binary/
+
+
+//
+
+
+
+class Solution {
+public:
+    void reverse(string& s) {
+        int first = 0;
+        int last = s.length() - 1;
+        while (first < last) {
+            char temp = s[first];
+            s[first++]= s[last];
+            s[last++] = temp;
+        }
+    }
+    string addBinary(string a, string b) {
+        string result;
+        reverse(a);
+        reverse(b);
+        int last = 0;
+        for (int i = 0; i < min(a.length(), b.length()); ++i) {
+            int temp = a[i] - '0' + b[i] - '0' + last; 
+            result += string(1, temp % 2 + '0');
+            last = temp / 2;
+        }
+        for (int i = min(a.length(), b.length()); i < a.length(); ++i) {
+            int temp = a[i] - '0' + last;
+            result += string(1, temp % 2 + '0');
+            last = temp / 2;
+        }
+        for (int i = min(a.length(), b.length()); i < b.length(); ++i) {
+            int temp = b[i] - '0' + last;
+            result += string(1, temp % 2 + '0');
+            last = temp / 2;
+        }
+        if (last)
+            result += "1";
+        reverse(result);
+        return result;
+    }
+};
