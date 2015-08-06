@@ -1,0 +1,26 @@
+//https://leetcode.com/problems/subsets/
+
+
+//别忘了排序，能让结果有序。
+
+
+class Solution {
+public:
+    void helper(vector<vector<int> >& results, vector<int>& nums, vector<int> result, int k) {
+        if (nums.size() == k) {
+            results.push_back(result);
+            return;
+        }
+        helper(results, nums, result, k + 1);
+        result.push_back(nums[k]);
+        helper(results, nums, result, k + 1);
+    }
+    vector<vector<int>> subsets(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        vector<vector<int> > results;
+        helper(results, nums, vector<int>(), 0);
+        return results;
+    }
+};
+
+
