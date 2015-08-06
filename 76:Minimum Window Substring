@@ -1,0 +1,95 @@
+//https://leetcode.com/problems/minimum-window-substring/
+
+
+//好多错，错到我都没法说，有些乱，要想好如何一步一步的做，才开始做。
+
+class Solution {
+public:
+    string minWindow(string s, string t) {
+        if (s.length() < t.length() || t.length() < 1) return "";
+        map<char, int> dir, temp;
+        for (int i = 0; i < t.length(); ++i) 
+            dir[t[i]] += 1;
+        
+        int count = 0;//放的位置
+        for (int i = 0; i < t.length() - 1; ++i) {
+            if (dir.find(s[i]) == dir.end()) continue;
+            temp[s[i]] += 1;
+            
+            if (temp[s[i]] <= dir[s[i]])
+                count += 1;
+        }
+        int last = 0;
+        int min_start = 0;
+        int min_len = 2147483647;/////////////////////////////////////////////////
+        for (int i = t.length() - 1; i < s.length(); ++i) {
+            if (dir.find(s[i]) == dir.end()) continue;
+            temp[s[i]] += 1;
+            if (temp[s[i]] <= dir[s[i]])
+                count += 1;
+            if (t.length() == count) {////////////////////////////////////////
+            // aaa,这种也会进来。
+                for (int j = last; j <= i; ++j) {///////////////////////////////////
+                    if (dir.find(s[j]) == dir.end()) continue;
+                    if (temp[s[j]] <= dir[s[j]]) {
+                        last = j;
+                        break;
+                    }
+                    temp[s[j]] -= 1;
+                }
+                if (i - last + 1 < min_len) {
+                    min_len = i - last + 1;
+                    min_start = last;
+                }
+                temp[s[last]] -= 1;
+                //if (0 == temp[s[last]])////////////////////////////////////////////
+                //    temp.erase(s[last]);
+                count -= 1;
+                last += 1;
+            }
+        }
+        if (2147483647 == min_len)//////////////////////////////////////////////////
+            min_len = 0;
+        return s.substr(min_start, min_len);
+    }
+    string minWindow1(string s, string t) {
+        if (s.length() < t.length() || t.length() < 1) return "";
+        map<char, int> dir, temp;
+        for (int i = 0; i < t.length(); ++i) 
+            dir[t[i]] += 1;
+        for (int i = 0; i < t.length() - 1; ++i) {
+            if (dir.find(s[i]) == dir.end()) continue;
+            temp[s[i]] += 1;
+        }
+        int last = 0;
+        int count = 0;
+        int min_start = 0;
+        int min_len = 2147483647;/////////////////////////////////////////////////
+        for (int i = t.length() - 1; i < s.length(); ++i) {
+            if (dir.find(s[i]) == dir.end()) continue;
+            temp[s[i]] += 1;
+            if (temp.size() == t.length()) {////////////////////////////////////////
+            // aaa,这种也会进来。
+                for (int j = last; j <= i; ++j) {///////////////////////////////////
+                    if (dir.find(s[j]) == dir.end()) continue;
+                    if (temp[s[j]] <= dir[s[j]]) {
+                        last = j;
+                        break;
+                    }
+                    temp[s[j]] -= 1;
+                }
+                if (i - last + 1 < min_len) {
+                    min_len = i - last + 1;
+                    min_start = last;
+                }
+                temp[s[last]] -= 1;
+                if (0 == temp[s[last]])////////////////////////////////////////////
+                    temp.erase(s[last]);
+                last += 1;
+            }
+        }
+        if (2147483647 == min_len)//////////////////////////////////////////////////
+            min_len = 0;
+        return s.substr(min_start, min_len);
+    }
+};
