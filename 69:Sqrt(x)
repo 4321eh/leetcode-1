@@ -1,0 +1,27 @@
+//https://leetcode.com/problems/sqrtx/
+
+
+//又忘了在if 里面加continue了！！！
+
+
+
+class Solution {
+public:
+    int mySqrt(int x) {
+        if (x < 0) return 0;
+        long long first = 0;
+        long long last = x;
+        while (first <= last) {
+            long long mid = (first + last) / 2;
+            if (mid * mid <= x && (mid + 1)*(mid + 1) > x) {
+                return mid;
+            }
+            if (mid * mid > x) {
+                last = mid - 1;
+                continue;
+            }
+            first = mid + 1;
+        }
+        return first;
+    }
+};
