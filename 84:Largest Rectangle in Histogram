@@ -2,7 +2,10 @@
 
 //https://leetcode.com/problems/largest-rectangle-in-histogram/
 
-// 有一个大bug，在19行
+// 有一个大bug，在22行
+
+
+//很好的一个想法
 
 
 class Solution {
