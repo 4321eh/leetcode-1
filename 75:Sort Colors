@@ -1,0 +1,44 @@
+//https://leetcode.com/problems/sort-colors/
+
+
+
+//我自己没有想到更好的解法
+
+
+class Solution {
+public:
+    void swap(int& a, int& b) {
+        //a ^= b ^= a ^= b;
+        int temp = a;
+        a = b; 
+        b = temp;
+    }
+    int helper(vector<int>& nums, int first, int last, int val, bool equal) {
+        int pre = first;
+        int pos = first;
+        while (pre <= last) {
+            bool flag = equal ? nums[pre] == val:nums[pre] != val;
+            if (flag) {
+                swap(nums[pos], nums[pre]);
+                pos += 1;
+            }
+            pre++;
+        }
+        return pos;
+    }
+    void sortColors1(vector<int>& nums) {
+        int mid = helper(nums, 0, nums.size() - 1, 0, true);
+        helper(nums, mid, nums.size() - 1, 2, false);
+    }
+    void sortColors1=2(vector<int>& nums) {
+        int mid = helper(nums, 0, nums.size() - 1, 0, true);
+        helper(nums, mid, nums.size() - 1, 1, true);
+    }
+    void sortColors(vector<int>& nums) {
+        int first = 0;
+        int last = nums.size() - 1;
+        while (true) {
+            while (first < last && first)
+        }
+    }
+};
