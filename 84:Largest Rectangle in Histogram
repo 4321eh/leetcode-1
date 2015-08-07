@@ -1,2 +1,26 @@
 
 
+//https://leetcode.com/problems/largest-rectangle-in-histogram/
+
+// 有一个大bug，在19行
+
+
+class Solution {
+public:
+    int largestRectangleArea(vector<int>& height) {
+        stack<int> up;
+        height.push_back(0);
+        int result = 0;
+        for (int i = 0; i < height.size(); ++i) {
+            while (not up.empty() && height[up.top()] > height[i]) {
+                int now = up.top();
+                up.pop();
+                int right = (i - now) * height[now];
+                int left =(up.empty()? now :(now - up.top() - 1) ) * height[now];//有过一个bug， up.empty()? now那里
+                result = max(result, right + left);
+            }
+            up.push(i);
+        }
+        return result;
+    }
+};
