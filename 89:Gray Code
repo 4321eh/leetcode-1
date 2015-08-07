@@ -1,0 +1,23 @@
+//https://leetcode.com/problems/gray-code/
+
+
+//有些不是很熟的样子，做这个题。
+
+
+// 还有 n 为 0 是，结果应是[0] 而不是[]
+
+class Solution {
+public:
+    vector<int> grayCode(int n) {
+        vector<int> result;
+        result.push_back(0);
+        int e = 1;
+        for (int i = 0; i < n; ++i) {
+            for (int j = result.size() - 1; j >= 0; --j) {
+                result.push_back(result[j] + e);
+            }
+            e *= 2;
+        }
+        return result;
+    }
+};
