@@ -1,0 +1,39 @@
+//https://leetcode.com/problems/binary-tree-maximum-path-sum/
+
+
+
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    void helper(TreeNode* root, int& path, int& result) {
+        if (NULL == root) {
+            path = 0;
+            return;
+        }
+        int left, right;
+        helper(root->left, left, result);
+        helper(root->right, right, result);
+        if (left < 0) left = 0;
+        if (right < 0) right = 0;
+        path = root->val + max(left, right);
+        result = max(result, path);
+        result = max(result, left + right + root->val);
+    }
+    int maxPathSum(TreeNode* root) {
+        int result = -2147483648;
+        int path;
+        helper(root, path, result);
+        if (-2147483648 == result)
+            result = path;
+        return result;
+    }
+};
