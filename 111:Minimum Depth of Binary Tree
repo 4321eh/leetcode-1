@@ -1,0 +1,24 @@
+//https://leetcode.com/problems/minimum-depth-of-binary-tree/
+
+
+//这个题，要重做！！！wa了二次！！！
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int minDepth(TreeNode* root) {
+        if (NULL == root) return 0;
+        if (NULL == root->left && NULL == root->right) return 1;
+        if (NULL != root->left && NULL == root->right) return minDepth(root->left) + 1;
+        if (NULL == root->left && NULL != root->right) return minDepth(root->right) + 1;
+        return min(minDepth(root->left), minDepth(root->right)) + 1;
+    }
+};
