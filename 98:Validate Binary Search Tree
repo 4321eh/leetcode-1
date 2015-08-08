@@ -1,0 +1,37 @@
+
+
+//https://leetcode.com/problems/validate-binary-search-tree/
+
+
+//错了不少地方，也没看题。囧了。
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    bool helper1(TreeNode* root, int left, int right) {
+        if (NULL == root) return true;
+        if (left >= root->val || right <= root->val) return false; //这里有=的！！！！！！！！
+        return helper1(root->left, left, root->val) && helper(root->right, root->val, right);
+    }
+    bool isValidBST1(TreeNode* root) {
+        //溢出了。。。
+        return helper1(root, -2147483648, 2147483647);
+    }
+    bool helper(TreeNode* root, long long left, long long right) {
+        if (NULL == root) return true;
+        if (left >= root->val || right <= root->val) return false;
+        return helper(root->left, left, root->val) && helper(root->right, root->val, right);
+    }
+    bool isValidBST(TreeNode* root) {
+        //溢出了。。。
+        return helper(root, -2147483649, 2147483649);
+    }
+};
