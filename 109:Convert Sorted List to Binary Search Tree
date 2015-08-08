@@ -40,3 +40,49 @@ public:
         return root;
     }
 };
+
+
+
+
+
+
+//下面也可以，记得要找再前一个，就加上多一个：pre->next->next->next
+
+
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* sortedListToBST(ListNode* head) {
+        if (NULL == head) return NULL;
+        if (NULL == head->next) return new TreeNode(head->val);
+        ListNode* pre = head;
+        ListNode* pos = head;
+        while (pre && pre->next && pre->next->next && pre->next->next->next) {
+            pre = pre->next->next;
+            pos = pos->next;
+        }
+        TreeNode* root = new TreeNode(pos->next->val);
+        root->right = sortedListToBST(pos->next->next);
+        pos->next = NULL;
+        root->left = sortedListToBST(head);
+        return root;
+    }
+};
