@@ -1,0 +1,42 @@
+//https://leetcode.com/problems/convert-sorted-list-to-binary-search-tree/
+
+
+//这个题做了n久，n个次wa，一开始还不知错在哪，后来才发现，是bst树！！！要平衡的！！！
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* sortedListToBST(ListNode* head) {
+        if (NULL == head) return NULL;
+        if (NULL == head->next) return new TreeNode(head->val);
+        ListNode* before = new ListNode(0);
+        before->next = head;
+        ListNode* pre , * pos;
+        pre = pos = before;
+        while (pre && pre->next && pre->next->next) {//平衡
+            pre = pre->next->next;
+            pos = pos->next;
+        }
+        TreeNode* root = new TreeNode(pos->next->val);
+        root->right = sortedListToBST(pos->next->next);
+        pos->next = NULL;
+        root->left = sortedListToBST(before->next);
+        return root;
+    }
+};
