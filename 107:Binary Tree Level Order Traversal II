@@ -1,0 +1,47 @@
+//https://leetcode.com/problems/binary-tree-level-order-traversal-ii/
+
+
+
+//copy 了 i 的代码，再reverse一下。
+
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<vector<int>> levelOrderBottom(TreeNode* root) {
+        vector<vector<int> > results = levelOrder(root);
+        reverse(results.begin(), results.end());
+        return results;
+    }
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int> > results;
+        queue<TreeNode*> next_level;
+        next_level.push(root);
+        while (not next_level.empty()) {
+            queue<TreeNode*> temp;
+            vector<int> result;
+            while (not next_level.empty()) {
+                TreeNode* p = next_level.front();
+                next_level.pop();
+                if (NULL == p)
+                    continue;
+                temp.push(p->left);
+                temp.push(p->right);
+                result.push_back(p->val);
+            }
+            //有过一个bug， result最后是空的。。。！！！！！！！！！
+            if (result.size())
+                results.push_back(result);
+            next_level = temp;
+        }
+        return results;
+    }
+};
