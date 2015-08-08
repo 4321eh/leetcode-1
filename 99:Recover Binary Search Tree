@@ -1,0 +1,39 @@
+//https://leetcode.com/problems/recover-binary-search-tree/
+
+
+//做得最得意的一道。。。但很容易错
+
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    void printOneVal(TreeNode* root, TreeNode* &last, TreeNode* &first, TreeNode*& second, int& count) {
+        if (last && root->val < last->val) {
+            count += 1;
+            if (1 == count)
+                first = last;
+            second = root;
+        }
+        last = root;
+    }
+    void helper(TreeNode* root, TreeNode* &last, TreeNode* &first, TreeNode* &second, int& count) {
+        if (count >= 2 || NULL == root) return;
+        helper(root->left, last, first, second, count);
+        printOneVal(root, last, first, second, count);
+        helper(root->right, last, first, second, count);
+    }
+    void recoverTree(TreeNode* root) {
+        TreeNode* last = NULL, * first = NULL, * second = NULL;
+        int count = 0;
+        helper(root, last, first, second, count);
+        first->val ^= second->val ^= first->val ^= second->val;
+    }
+};
