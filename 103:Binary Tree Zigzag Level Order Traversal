@@ -1,0 +1,77 @@
+
+
+
+
+
+
+//https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/
+
+
+//不在状态，一开始都没弄对，后面才发现可以用一个stack来做。
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        vector<vector<int> > results;
+        stack<TreeNode* > next;
+        next.push(root);
+        bool left_to_right = true;
+        while (not next.empty()) {
+            stack<TreeNode* > temp;
+            vector<int> result;
+            while (not next.empty()) {
+                TreeNode* p = next.top();
+                next.pop();
+                if (NULL == p) continue;
+                result.push_back(p->val);
+                if (left_to_right) {
+                    temp.push(p->left);
+                    temp.push(p->right);
+                    continue;
+                }
+                temp.push(p->right);
+                temp.push(p->left);
+            }
+            left_to_right = not left_to_right;
+            if (result.size())
+                results.push_back(result);
+            next = temp;
+        }
+        return results;
+    }
+    vector<vector<int>> zigzagLevelOrder2(TreeNode* root) {
+        vector<vector<int> > results;
+        vector<TreeNode* > next_level;
+        next_level.push_back(root);
+        bool left_to_right = true;
+        while (not next_level.empty()) {
+            vector<TreeNode* > temp;
+            vector<int> result;
+            for (int i = next_level.size() - 1; i >= 0 ; --i) {
+                if (NULL == next_level[i]) continue;
+                result.push_back(next_level[i]->val);
+                if (left_to_right) {
+                    temp.push_back(next_level[i]->left);
+                    temp.push_back(next_level[i]->right);
+                    continue;
+                }
+                temp.push_back(next_level[i]->right);
+                temp.push_back(next_level[i]->left);
+            }
+            left_to_right = not left_to_right;
+            if (result.size())
+                results.push_back(result);
+            next_level = temp;
+        }
+        return results;
+    }
+};
