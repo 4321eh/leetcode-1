@@ -1,0 +1,36 @@
+//https://leetcode.com/problems/longest-consecutive-sequence/
+
+//回做，居然不知乍做，还要查才知道。
+
+
+//c++ , 用unordered_set 来建hash
+
+//c++里面的set，map，mutil_map底下都是红黑树
+
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        if (nums.size() < 2) return nums.size();
+        unordered_set<long long> all_nums;
+        for (int i = 0; i < nums.size(); ++i) {
+            all_nums.insert(nums[i]);
+        }
+        int max_len = 0;
+        while (not all_nums.empty()) {
+            long left = *(all_nums.begin());
+            long right = *(all_nums.begin());
+            all_nums.erase(left);
+            while (all_nums.find(left - 1) != all_nums.end()) {
+                left -= 1;
+                all_nums.erase(left);
+            }
+            while (all_nums.find(right + 1) != all_nums.end()) {
+                right += 1;
+                all_nums.erase(right);
+            }
+            if (max_len < right - left + 1)
+                max_len = right - left + 1;
+        }
+        return max_len;
+    }
+};
