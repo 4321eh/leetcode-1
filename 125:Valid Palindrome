@@ -1,0 +1,33 @@
+//https://leetcode.com/problems/valid-palindrome/
+
+//有一个大错！！！！我想要c1 = c1 - 'A' + 'a, 写成了c1 -= 'A' + 'a'。
+//而c1 -= 'A' + 'a'是c1 = c1 - （'A' + 'a')的结果了。也就是 c1 = c1 - 'A' - 'a'了 
+// !!!!!!!!!!!!!!!!!!!!!
+
+class Solution {
+public:
+    bool isAlph(char c) {
+        return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9');
+    }
+    bool isEqual(char c1, char c2) {
+        if (c1 >= 'A' && c1 <= 'Z')
+            c1 -= 'A' - 'a';
+        if (c2 >= 'A' && c2 <= 'Z')
+            c2 -= 'A' - 'a';
+        return c1 == c2;
+    }
+    bool isPalindrome(string s) {
+        int first = 0;
+        int last = s.length() - 1;
+        while (first < last) {
+            while (first <= last && not isAlph(s[first])) first += 1;
+            while (first <= last && not isAlph(s[last])) last -=1;
+            if (first >= last) continue;
+            if (not isEqual(s[first], s[last]))
+                return false;
+            first += 1;
+            last -= 1;
+        }
+        return true;
+    }
+};
