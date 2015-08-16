@@ -1,0 +1,108 @@
+//https://leetcode.com/problems/populating-next-right-pointers-in-each-node-ii/
+
+
+//完全用了116的代码来解这个题。
+
+/**
+ * Definition for binary tree with next pointer.
+ * struct TreeLinkNode {
+ *  int val;
+ *  TreeLinkNode *left, *right, *next;
+ *  TreeLinkNode(int x) : val(x), left(NULL), right(NULL), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    void pointToParent(TreeLinkNode *root) {
+        if (NULL == root) return;
+        if (NULL == root->left && NULL == root->right) return;
+        if (NULL != root->left) {
+            root->left->next = root;
+            pointToParent(root->left);
+        }
+        if (NULL != root->right) {
+            root->right->next = root;
+            pointToParent(root->right);
+        }
+    }
+    void pointToNext(TreeLinkNode *most_left) {
+        while (most_left)  {
+            TreeLinkNode *child_most_left = NULL;
+            while (most_left) {
+                if (NULL == child_most_left && NULL != most_left->left) {
+                    child_most_left = most_left->left;
+                }
+                if (NULL == child_most_left && NULL != most_left->right) {
+                    child_most_left = most_left->right;
+                }
+                TreeLinkNode *next_most_left = NULL;
+                TreeLinkNode *parent = most_left->next;
+                while(NULL == next_most_left && parent) {
+                    if (NULL == parent->left && NULL == parent->right) {
+                        parent = parent->next;
+                        continue;
+                    }
+                    if (NULL != parent->left && NULL != parent->right) {
+                        if (parent->right == most_left) {
+                            parent = parent->next;
+                            continue;
+                        }
+                        if (parent->left == most_left) {
+                            next_most_left = parent->right;
+                            continue;
+                        }
+                        next_most_left = parent->left;
+                        continue;
+                    }
+                    if (NULL != parent->left) {
+                        if (parent->left == most_left) {
+                            parent = parent->next;
+                            continue;
+                        }
+                        next_most_left = parent->left;
+                        continue;
+                    }
+                    if (NULL != parent->right) {
+                        if (parent->right == most_left) {
+                            parent = parent->next;
+                            continue;
+                        }
+                        next_most_left = parent->right;
+                        continue;
+                    }
+                    
+                    
+                    /* 没想好时，wa过的代码，关键点在于没法判断前驱是空的情况
+                    if (NULL != parent->left) {
+                        if (most_left == parent->left) {
+                            if (parent->right) {
+                                next_most_left = parent->right;
+                                continue;
+                            }
+                            parent = parent->next;
+                            continue;
+                        }
+                        next_most_left = parent->left;
+                        continue;
+                    }
+                    if (NULL != parent->right) {
+                        if (most_left == parent->right) {
+                            parent = parent->next;
+                            continue;
+                        }
+                        next_most_left = parent->right;
+                        continue;
+                    }
+                    */
+                }
+                most_left->next = next_most_left;
+                most_left = most_left->next;
+            }
+            most_left = child_most_left;
+        }
+    }
+    void connect(TreeLinkNode *root) {
+        pointToParent(root);
+        pointToNext(root);
+    }
+};
