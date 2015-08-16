@@ -1,0 +1,50 @@
+//
+
+//错失在两个地方：一个是helper的results前没有加&，第二个是atoi没有考虑到-的情况，
+//py说得很对，别急着做，要想一下有没有什么我没有想到的
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    string atoi(int val) {
+        if (0 == val) return "0";
+        string result;
+        bool flag = false;
+        if (val < 0) {
+            val = -val;
+            flag = true;
+        }
+        while (val) {
+            result = string(1, val % 10 + '0') + result;
+            val /= 10;
+        }
+        if (flag)
+            result = "-" + result;
+        return result;
+    }
+    void helper(vector<string>& results, string result, TreeNode* parent) {
+        if (NULL == parent->left && NULL == parent->right) {
+            results.push_back(result);
+            return;
+        }
+        if (NULL != parent->left) 
+            helper(results, result + "->" + atoi(parent->left->val), parent->left);
+        if (NULL != parent->right)
+            helper(results, result + "->" + atoi(parent->right->val), parent->right);
+    }
+    vector<string> binaryTreePaths(TreeNode* root) {
+        vector<string> results;
+        if (NULL == root) return results;
+        string result = atoi(root->val);
+        helper(results, result, root);
+        return results;
+    }
+};
