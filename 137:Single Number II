@@ -1,0 +1,24 @@
+//https://leetcode.com/problems/single-number-ii/
+
+//
+
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        vector<int> bit(32, 0);
+        
+        for (int i = 0; i < nums.size(); ++i) {
+            int n = nums[i];
+            for (int i = 31; i >= 0 && n; --i) {
+                bit[i] += n & 1;
+                n >>= 1;
+            }
+        }
+        int result = 0;
+        for (int i = 0; i < 32; ++i) {
+            result <<= 1;
+            result += bool(bit[i] % 3);
+        }
+        return result;
+    }
+};
