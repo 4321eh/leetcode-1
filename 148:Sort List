@@ -1,0 +1,48 @@
+
+//https://leetcode.com/problems/sort-list/
+
+
+//本以为很熟的了，可在        while (pos && pos->next && pos->next->next) ，
+//本来是        while (pos && pos->next), 结果在只有两个元素的时候给死循环了，永远都只分成2个元素和一个空表！！！
+//很low的错
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* sortList(ListNode* head) {
+        if (NULL == head || NULL == head->next) return head;
+        ListNode *pre = head;
+        ListNode *pos = head;
+        while (pos && pos->next && pos->next->next) {
+            pos = pos->next->next;
+            pre = pre->next;
+        }
+        pos = sortList(pre->next);
+        pre->next = NULL;
+        pre = sortList(head);
+        ListNode *before = new ListNode(0);
+        ListNode *p = before;
+        while (pre && pos) {
+            if (pre->val < pos->val) {
+                p->next = pre;
+                pre = pre->next;
+            } else {
+                p->next = pos;
+                pos = pos->next;
+            }
+            p = p->next;
+        }
+        if (pre)
+            p->next = pre;
+        if (pos)
+            p->next = pos;
+        return before->next;
+    }
+};
