@@ -1,0 +1,50 @@
+//https://leetcode.com/problems/reorder-list/
+
+//链排，注意：只有一个，只有两个的情况要如何handle
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverse(ListNode *head) {
+        if (NULL == head || NULL == head->next) return head;
+        ListNode *p = reverse(head->next);
+        head->next->next = head;
+        head->next = NULL;
+        return p;
+    }
+    void reorderList(ListNode* head) {
+        if (NULL == head || NULL == head->next) return;
+        ListNode *before = new ListNode(0);
+        before->next = head;
+        ListNode *pre = before;
+        ListNode *pos = before;
+        while (pre->next && pre->next->next) {
+            pos = pos->next;
+            pre = pre->next->next;
+        }
+        pre = reverse(pos->next);
+        pos->next = NULL;
+        pos = head;
+        ListNode *p = before;
+        while (pre && pos) {
+            p = p->next = pos;
+            pos = pos->next;
+            
+            p = p->next = pre;
+            pre = pre->next;
+        }
+        if (pre)
+            p->next = pre;
+        if (pos)
+            p->next = pos;
+    }
+};
+
