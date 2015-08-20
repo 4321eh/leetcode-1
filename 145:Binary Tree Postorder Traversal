@@ -1,0 +1,92 @@
+//https://leetcode.com/problems/binary-tree-postorder-traversal/
+
+
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+ 
+ /*
+ status Traverse(BiTree T, status(* visit)(TElemType e)){
+    IniTStack(s); p=T; p1=NULL;
+    while(p || !StackEmpty(s)){
+        if(p){
+            Push(s,p);
+            //visit,先序
+            p=p->lchild;
+        }else{
+            GetTop(s,p);
+            //visit,中序
+            if(p->rchild==p1 || p->rchild==NULL){
+                Pop(s,p1);p=NULL;
+                //visit,后序
+            }else{
+                p=p->rchild;p1=NULL;
+            }
+        }
+    }
+}
+ */
+class Solution {
+public:
+    void helper_rec(vector<int>& result, TreeNode *root) {
+        if (NULL == root) return;
+        helper_rec(result, root->left);
+        helper_rec(result, root->right);
+        result.push_back(root->val);
+    }
+    void helper_non_rec(vector<int>& result, TreeNode *root) {
+        TreeNode *p = root;
+        stack<TreeNode*> s;
+        TreeNode *p1 = NULL;
+        while (NULL != p || not s.empty()) {
+            if (NULL != p)  {
+                s.push(p);
+                //result.push_back(p->val);写在这是先序
+                p = p->left;
+                continue;
+            }
+            p = s.top();
+            //if (p->right != p1 || NULL == p->right)
+                //result.push_back(p->val);写在这是中序
+            if (p->right == p1 || NULL == p->right) {
+                result.push_back(p->val);//写在这是后序
+                p1 = p;
+                p = NULL;
+                s.pop();
+                continue;
+            }
+            p = p->right;
+            p1 = NULL;
+        }
+    }
+    /*
+        return;
+        
+        while (NULL != p || not s.empty()) {
+            if (NULL == p) {
+                p = s.top();
+                if (NULL == p->right) {
+                    result.push_back(p->val);
+                    s.pop();
+                    p = p->right;
+                    continue;
+                }
+            }
+            s.push(p);
+            p = p->left;
+        }
+    }*/
+    vector<int> postorderTraversal(TreeNode* root) {
+        vector<int> result;
+        //helper_rec(result, root);
+        helper_non_rec(result, root);
+        return result;
+    }
+};
