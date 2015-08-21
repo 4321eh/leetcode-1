@@ -1,0 +1,45 @@
+//https://leetcode.com/problems/compare-version-numbers/
+
+//好多错点：strToVec中，push_back(num)后没有把num弄成0
+// 对于return -1， 0， 1 的概念不明白，直接return a > b;
+// 没有考虑到1.0 和 1 的情况
+//
+
+
+class Solution {
+public:
+    // case: 0.0 0!!!!!
+    vector<int> strToVec(string s) {
+        vector<int> result;
+        int num = 0;
+        for (int i = 0; i < s.length(); ++i) {
+            if ('.' == s[i]) {
+                result.push_back(num);
+                num = 0;
+                continue;
+            }
+            num *= 10;
+            num += (s[i] - '0');
+        }
+        result.push_back(num);
+        return result;
+    }
+    int compareVersion(string version1, string version2) {
+        vector<int> v1 = strToVec(version1);
+        vector<int> v2 = strToVec(version2);
+        
+        while (v1.size() < v2.size()) 
+            v1.push_back(0);
+        while (v1.size() > v2.size())
+            v2.push_back(0);
+            
+        for (int i = 0; i < v1.size(); ++i) {
+            if (v1[i] == v2[i]) continue;
+            if (v1[i] > v2[i]) return 1;
+            return -1;
+        }
+        if (v1.size() == v2.size()) return 0;
+        if (v1.size() > v2.size()) return 1;
+        return -1;
+    }
+};
