@@ -1,0 +1,24 @@
+//https://leetcode.com/problems/single-number-iii/
+
+//好聪明。。。！！！！
+
+
+class Solution {
+public:
+    vector<int> singleNumber(vector<int>& nums) {
+        int split = 0;
+        for (int i = 0; i < nums.size(); ++i) {
+            split ^= nums[i];
+        }
+        split -= (split & (split - 1));
+        vector<int> result(2, 0);
+        for (int i = 0; i< nums.size(); ++i) {
+            if (nums[i] & split) {
+                result[0] ^= nums[i];
+                continue;
+            }
+            result[1] ^= nums[i];
+        }
+        return result;
+    }
+};
