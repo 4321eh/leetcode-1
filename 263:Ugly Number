@@ -1,0 +1,27 @@
+
+
+//https://leetcode.com/problems/ugly-number/
+
+
+class Solution {
+public:
+    bool isUgly(int num) {
+        while (num > 0) {
+            if (1 == num) return true;
+            if (0 == num % 2) {
+                num /= 2;
+                continue;
+            }
+            if (0 == num % 3) {
+                num /= 3;
+                continue;
+            }
+            if (0 == num % 5) {
+                num /= 5;
+                continue;
+            }
+            break;
+        }
+        return false;
+    }
+};
