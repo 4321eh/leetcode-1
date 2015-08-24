@@ -1,0 +1,76 @@
+//https://leetcode.com/problems/ugly-number-ii/
+
+//推排的 delete有问题！！！！正确的做法是：去了顶的，然后从最后拿一个放到顶，然后调到合适！！！
+
+//囧！！！！！！！！！！！！！！！！！！！！！
+
+
+class Heap {
+public:
+    Heap():last(1){
+    }
+    void push(long long val) {
+        if (val > 2147483647) return ;
+        if (s.find(val) != s.end()) return;
+        s.insert(val);
+        int i = last;
+        data[last++] = val;
+        while (i > 1) {
+            if (data[i] >= data[i / 2]) break;
+            int temp = data[i];
+            data[i] = data[i / 2];
+            data[i / 2] = temp;
+            i /= 2;
+        }
+    }
+    int pop() {
+        int val = data[1];
+        data[1] = data[--last];
+        int i = 1;
+        while (2 * i < last) {
+            if (2 * i + 1 < last && data[i] < data[2 * i] && data[i] < data[2 * i + 1]) {
+                break;
+            }
+            if (2 * i + 1< last) {
+                if (data[2 * i] < data[2 * i + 1]) {
+                    swap(data[i], data[2 * i]);
+                    i = 2 * i;
+                } else {
+                    swap(data[i], data[2 * i + 1]);
+                    i = 2 * i + 1;
+                }
+                continue;
+            }
+            if (data[i] < data[2 * i]) {
+                break;
+            }
+            swap(data[i], data[2 * i]);
+            i = 2 * i;
+        }
+        return val;
+    }
+private:
+    void swap(int &a, int &b) {
+        int temp = a;
+        a = b;
+        b = temp;
+    }
+    int last;
+    int data[1000];
+    set<int> s;
+};
+class Solution {
+public:
+    int nthUglyNumber(int n) {
+        Heap heap;
+        heap.push(1);
+        while (n > 1) {
+            long long m = heap.pop();
+            heap.push(2 * m);
+            heap.push(3 * m);
+            heap.push(5 * m);
+            n -= 1;
+        }
+        return heap.pop();
+    }
+};
