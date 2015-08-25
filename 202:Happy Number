@@ -1,0 +1,28 @@
+//https://leetcode.com/problems/happy-number/
+
+//会有个环的！！！妈的。
+
+
+class Solution {
+public:
+    int next(int i) {
+        int result = 0;
+        while (i) {
+            result += (i % 10) * (i % 10);
+            i /= 10;
+        }
+        return result;
+    }
+    bool isHappy(int n) {
+        int i = n;
+        int j = n;
+        while (true) {
+            i = next(i);
+            j = next(next(j));
+            if (1 == i) return true;
+            if (i == n) return false;
+            if (i == j) return false;
+        }
+        return false;
+    }
+};
