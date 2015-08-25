@@ -1,0 +1,43 @@
+//https://leetcode.com/problems/rotate-array/
+
+//一开始，不知发什么神经，没有ac。
+//应先把k换到开始先就比较好理解了。
+
+
+class Solution {
+public:
+    void helper(vector<int>& nums, int first, int last) {
+        while (first < last) {
+            int temp = nums[first];
+            nums[first++] = nums[last];
+            nums[last--] = temp;
+        }
+    }
+    void rotate(vector<int>& nums, int k) {
+        if (nums.size() < 1) return;
+        k = (2 * nums.size() - k) % nums.size();
+        helper(nums, 0, k - 1);
+        helper(nums, k , nums.size() - 1);
+        helper(nums, 0, nums.size() - 1);
+    }
+};
+
+//也一样是过的。。。囧，之前为什么没有ac呢？
+
+class Solution {
+public:
+    void helper(vector<int>& nums, int first, int last) {
+        while (first < last) {
+            int temp = nums[first];
+            nums[first++] = nums[last];
+            nums[last--] = temp;
+        }
+    }
+    void rotate(vector<int>& nums, int k) {
+        if (nums.size() < 1) return;
+        k %= nums.size();
+        helper(nums, nums.size() - k, nums.size() - 1);
+        helper(nums, 0 , nums.size() - k - 1);
+        helper(nums, 0, nums.size() - 1);
+    }
+};
