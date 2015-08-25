@@ -1,0 +1,14 @@
+//https://leetcode.com/problems/power-of-two/
+
+//忘了0！！！
+//忘了overflow！！！
+
+
+class Solution {
+public:
+    bool isPowerOfTwo(int n) {
+        long long m = n;
+        if (0 == m) return false;
+        return 0 == (m & (m - 1));
+    }
+};
