@@ -1,0 +1,28 @@
+//https://leetcode.com/problems/different-ways-to-add-parentheses/
+
+
+class Solution {
+public:
+    bool isOp(char c) {return '+' == c || '-' == c || '*' == c || '/' == c;}
+    int op(char c, int a, int b) {
+        if ('+' == c) return a + b;
+        if ('-' == c) return a - b;
+        if ('*' == c) return a * b;
+        if ('/' == c) return a / b;
+    }
+    vector<int> diffWaysToCompute(string input) {
+        vector<int> result;
+        for (int i = 1; i < input.length() - 1; ++i) {
+            if (not isOp(input[i])) continue;
+            vector<int> first = diffWaysToCompute(input.substr(0, i));
+            vector<int> last = diffWaysToCompute(input.substr(i + 1, input.length() - i));
+            for (int j = 0; j < first.size(); ++j) {
+                for (int k = 0; k < last.size(); ++k) {
+                    result.push_back(op(input[i], first[j], last[k]));
+                }
+            }
+        }
+        if (result.size() == 0) result.push_back(atoi(input.c_str()));
+        return result;
+    }
+};
