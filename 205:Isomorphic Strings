@@ -1,0 +1,21 @@
+//https://leetcode.com/problems/isomorphic-strings/
+
+
+class Solution {
+public:
+    bool isIsomorphic(string s, string t) {
+        map<char, char> correspond;
+        set<char> has_ocur;
+        for (int i = 0; i < s.length() && i < t.length(); ++i) {
+            if (correspond.find(s[i]) == correspond.end()) {
+                if (has_ocur.find(t[i]) != has_ocur.end()) return false;
+                correspond[s[i]] = t[i];
+                s[i] = t[i];
+                has_ocur.insert(t[i]);
+                continue;
+            }
+            s[i] = correspond[s[i]];
+        }
+        return s == t;
+    }
+};
