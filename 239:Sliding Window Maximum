@@ -1,0 +1,72 @@
+//https://leetcode.com/problems/sliding-window-maximum/
+
+
+// 太多太多的编译错误了： max冲突了；类后没有分号；
+
+// k被我 --k后，后再用于for （int i = k - 1。。。。。
+
+// 忘了实现stack的 empty函数了
+
+
+int max1(int a, int b) {
+    if (a > b) return a;
+    return b;
+}
+class maxStack {
+public:
+    maxStack() {}
+    void push(int val) {
+        s1.push(val);
+        s2.push(max1(val, s2.empty()?val:s2.top()));
+    }
+    int pop() {
+        s1.pop();
+        s2.pop();
+    }
+    int top() {return s1.top();}
+    int max() {return s2.top();}
+    bool empty() {return s1.empty();}
+private:
+    stack<int> s1;
+    stack<int> s2;
+};
+class maxQueue {
+public:
+    maxQueue() {}
+    void push(int val) {s1.push(val);}
+    void pop() {
+        if (s2.empty()) {
+            while (not s1.empty()) {
+                s2.push(s1.top());
+                s1.pop();
+            }
+        }
+        s2.pop();
+    }
+    int max() {
+        if (not s1.empty() && not s2.empty()) return max1(s1.max(), s2.max());
+        if (not s1.empty()) return s1.max();
+        return s2.max();
+    }
+    bool empty() { return s1.empty() && s2.empty();}
+private:
+    maxStack s1;
+    maxStack s2;
+};
+
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        maxQueue maxQ;
+        vector<int> result;
+        for (int i = 0; i < nums.size() && i  < k - 1; ++i) {
+            maxQ.push(nums[i]);
+        }
+        for (int i = k - 1; i < nums.size(); ++i) {
+            maxQ.push(nums[i]);
+            result.push_back(maxQ.max());
+            maxQ.pop();
+        }
+        return result;
+    }
+};
