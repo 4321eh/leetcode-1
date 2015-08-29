@@ -1,0 +1,67 @@
+//https://leetcode.com/problems/search-a-2d-matrix-ii/
+
+//要吐嘈很多
+//可以去了case没去
+//左右下标，在调用时弄错了。
+
+
+//有更简单的方法
+
+class Solution {
+public:
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+        if (matrix.size() < 1) return false;
+        int i = 0;
+        int j = matrix[0].size() - 1;
+        while (i < matrix.size() && j >= 0) {
+            if (matrix[i][j] == target) return true;
+            if (matrix[i][j] > target) {
+                j -= 1;
+                continue;
+            }
+            i += 1;
+        }
+        return false;
+    }
+};
+
+
+
+class Solution {
+public:
+    bool isIn(vector<vector<int>>& matrix, int n, int first, int last, bool isRow, int target) {
+        while (first <= last) {
+            int mid = (first + last) / 2;
+            int val = isRow? matrix[n][mid]: matrix[mid][n];
+            if (val == target) return true;
+            if (val > target) {
+                last = mid - 1;
+                continue;
+            }
+            first = mid + 1;
+        }
+        return false;
+    }
+    bool helper(vector<vector<int>>& matrix, int x1, int y1, int x2, int y2, int target) {
+        if (x1 > x2 || y1 > y2) return false;
+        int mid_x = (x1 + x2) / 2;
+        int mid_y = (y1 + y2) / 2;
+        if (target == matrix[mid_x][mid_y]) return true;
+        if (target > matrix[x2][y2] || target < matrix[x1][y1]) return false;
+        bool result = false;
+        result = result || isIn(matrix, mid_x, y1, y2, true, target);
+        result = result || isIn(matrix, mid_y, x1, x2, false, target);
+        result = result || helper(matrix, mid_x + 1, y1, x2, mid_y - 1, target);
+        result = result || helper(matrix, x1, mid_y + 1, mid_x - 1, y2, target);
+        if (target > matrix[mid_x][mid_y]) {
+            result = result || helper(matrix, mid_x + 1, mid_y + 1, x2, y2, target);
+        } else {
+            result = result || helper(matrix, x1, y1, mid_x - 1, mid_y - 1, target);
+        }
+        return result;
+    }
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+        if (matrix.size() < 1) return false;
+        return helper(matrix, 0, 0, matrix.size() - 1, matrix[0].size() - 1, target);
+    }
+};
