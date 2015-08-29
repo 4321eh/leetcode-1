@@ -1,0 +1,32 @@
+//https://leetcode.com/problems/kth-largest-element-in-an-array/
+
+
+//要举例子来算下标
+
+
+
+
+class Solution {
+public:
+    void swap(int &a, int &b) {
+        int temp = a;
+        a = b;
+        b = temp;
+    }
+    int helper(vector<int>& nums, int first, int last, int k) {
+        if (first == last) return nums[first];
+        int mid = first + 1;
+        for (int i = first + 1; i <= last; ++i) {
+            if (nums[i] > nums[first]) continue;
+            swap(nums[mid], nums[i]);
+            mid += 1;
+        }
+        swap(nums[first], nums[--mid]);
+        if (last - mid + 1 == k) return nums[mid];
+        if (last - mid + 1 > k) return helper(nums, mid + 1, last, k);
+        return helper(nums, first, mid - 1, k - (last - mid + 1));
+    }
+    int findKthLargest(vector<int>& nums, int k) {
+        return helper(nums, 0, nums.size() - 1, k);
+    }
+};
