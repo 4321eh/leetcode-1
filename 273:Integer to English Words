@@ -1,0 +1,44 @@
+//https://leetcode.com/problems/integer-to-english-words/
+
+//
+
+class Solution {
+public:
+    string helper(int num) {
+        string OneDigit[] = {"", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"};
+        string TwoDigit[] = {"","Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"};
+        string TensDigit[] = {"", "Ten", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"};
+        string result;
+        if (num / 100) {
+            result = OneDigit[num/100] + " Hundred";
+            num %= 100;
+            if (num) result += " ";
+        }
+        if (num > 10 && num < 20) {
+            result += TwoDigit[num % 10];
+            num = 0;
+        }
+        if (num / 10) {
+            result += TensDigit[num/10];
+            num %= 10;
+            if (num) result += " ";
+        }
+        if (num) result += OneDigit[num];
+        return result;
+    }
+    string numberToWords(int num) {
+       if (0 == num) return "Zero";
+       string result;
+       int base[] = {1000000000, 1000000, 1000, 1};
+       string baseName[] = {" Billion", " Million", " Thousand", ""};
+       for (int i = 0; i < 4; ++i) {
+           if (num / base[i]) {
+               result += helper(num / base[i]);
+               num %= base[i];
+               result += baseName[i];
+               if (num) result += " ";
+           }
+       }
+       return result;
+    }
+};
