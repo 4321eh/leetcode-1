@@ -1,0 +1,61 @@
+
+
+
+
+//https://leetcode.com/problems/repeated-dna-sequences/
+
+
+//忘了去重，发现手脚比以前慢了。。。。
+
+
+
+
+
+
+
+class Solution {
+public:
+    string iToDNA(int num, map<int, string>& r_dir) {
+        string result;
+        for (int i = 0; i < 10; ++i) {
+            result += r_dir[num % 4];
+            num >>= 2;
+        }
+        reverse(result.begin(), result.end());
+        return result;
+    }
+    vector<string> findRepeatedDnaSequences(string s) {
+        map<char, int> dir;
+        dir['A'] = 0;
+        dir['G'] = 1;
+        dir['C'] = 2;
+        dir['T'] = 3;
+        map<int, string> r_dir;
+        r_dir[0] = "A";
+        r_dir[1] = "G";
+        r_dir[2] = "C";
+        r_dir[3] = "T";
+        int num = 0;
+        int base = 0;
+        for (int i = 0; i < 9 && i < s.length(); ++i) {
+            base <<= 2;
+            base += 3;
+            num <<= 2;
+            num += dir[s[i]];
+        }
+        vector<string> result;
+        set<int> has;
+        set<int> next;
+        for (int i = 9; i < s.length(); ++i) {
+            num &= base;
+            num <<= 2;
+            num += dir[s[i]];
+            if (has.find(num) != has.end() && next.find(num) == next.end()) {
+                result.push_back(iToDNA(num, r_dir));
+                next.insert(num);
+            }
+            has.insert(num);
+        }
+        return result;
+    }
+};
