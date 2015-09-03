@@ -1,0 +1,73 @@
+//https://leetcode.com/problems/simplify-path/
+
+//这个题刷了好久！！！！！！！！！！！！！！！！！！！！！！！！！
+
+class Solution {
+public:
+    string simplifyPath(string path) {
+        stack<string> s;
+        path += "/";
+        int first = 0;
+        for (int i = 0; i < path.length(); ++i) {
+            if ('/' == path[i]) {
+                if (i == first) {
+                    first += 1;
+                    continue;
+                }
+                string temp = path.substr(first, i - first);
+                first = i + 1;
+                if ("." == temp || "" == temp) continue;
+                if (".." == temp) {
+                    if (not s.empty()) s.pop();
+                    continue;
+                }
+                s.push(temp);
+            }
+        }
+        
+        string result;
+        while (not s.empty()) {
+            result = "/" + s.top() + result;
+            s.pop();
+        }
+        if ("" == result) result = "/";
+        return result;
+    }
+    string simplifyPath1(string path) {
+        vector<string> v = split(path);
+        stack<string> s;
+        for (int i = 0; i < v.size(); ++i) {
+            if ("." == v[i] || "" == v[i]) continue;
+            if (".." == v[i]) {
+                if (not s.empty()) s.pop();
+                continue;
+            }
+            s.push(v[i]);
+        }
+        string result;
+        while (not s.empty()) {
+            result = "/" + s.top() + result;
+            s.pop();
+        }
+        if ("" == result) result = "/";
+        return result;
+    }
+private:
+    vector<string> split(string s) {
+        s += "/";
+        vector<string> v;
+        int last = 0;
+        for (int i = 0; i < s.length(); ++i) {
+            if ('/' == s[i]) {
+                if (i == last) {
+                    last += 1;
+                    continue;
+                }
+                string temp = s.substr(last, i - last);
+                last = i + 1;
+                v.push_back(temp);
+            }
+        }
+        return v;
+    }
+};
