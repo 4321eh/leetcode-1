@@ -1,0 +1,18 @@
+//https://leetcode.com/problems/contains-duplicate-ii/
+
+
+
+
+class Solution {
+public:
+    bool containsNearbyDuplicate(vector<int>& nums, int k) {
+        map<int,int> dir;
+        for (int i = 0; i < nums.size(); ++i) {
+            if (dir.find(nums[i]) != dir.end()) {
+                if (i - dir[nums[i]] <= k) return true;
+            }
+            dir[nums[i]] = i;
+        }
+        return false;
+    }
+};
