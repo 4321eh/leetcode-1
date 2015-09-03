@@ -1,0 +1,23 @@
+//https://leetcode.com/problems/minimum-size-subarray-sum/
+// 也交了很多次，总感觉不在状态。但细细静下来，想好要乍做，每个变量是做什么的，有什么范围。就能做对了。
+
+class Solution {
+public:
+    int minSubArrayLen(int s, vector<int>& nums) {
+        int sum = 0;
+        int first = 0;
+        int last = 0;
+        int result = nums.size() + 1;
+        while (first <= last) {
+            if (sum >= s) {
+                result = min(result, last - first);
+                sum -= nums[first++];
+                continue;
+            }
+            if (nums.size() == last) break;
+            sum += nums[last++];
+        }
+        if (nums.size() + 1 == result) result = 0;
+        return result;
+    }
+};
