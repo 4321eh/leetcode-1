@@ -1,0 +1,26 @@
+//https://leetcode.com/problems/longest-valid-parentheses/
+
+//还是那句话，想清楚每个变量是做什么的，有什么约束，慢慢来就能做对
+
+class Solution {
+public:
+    int longestValidParentheses(string s) {
+        vector<int> dp(s.length(), -1);
+        int result = 0;
+        for (int i = 1; i < s.length(); ++i) {
+            if ('(' == s[i]) continue;
+            int j = i - 1;
+            while (j >= 0 && dp[j] >= 0) {
+                j = dp[j] - 1;
+            }
+            if (j >= 0 && '(' == s[j]) {
+                if (j - 1 >= 0 && dp[j - 1] >= 0) {
+                    j = dp[j - 1];
+                }
+                dp[i] = j;
+                result = max(result, i - j + 1);
+            } 
+        }
+        return result;
+    }
+};
