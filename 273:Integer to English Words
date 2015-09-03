@@ -1,6 +1,6 @@
 //https://leetcode.com/problems/integer-to-english-words/
 
-//
+//一开始没有注意num = 0时的输出空串，helper里面的没有注意到是下标的开始
 
 class Solution {
 public:
