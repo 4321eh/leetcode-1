@@ -1,0 +1,82 @@
+//https://leetcode.com/problems/reverse-linked-list-ii/
+
+// 不知为何之前错了这么多次。。。。
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseBetween(ListNode* head, int m, int n) {
+        if (m == n) return head;
+        ListNode *before = new ListNode(0);
+        before->next = head;
+        ListNode *p = before;
+        n -= m;
+        while (p && m-- > 1) p = p->next;
+        ListNode *pre = p;
+        while (p && n-- >= 0) p = p->next;
+        ListNode *q = p->next;
+        p->next = NULL;
+        ListNode *temp = reverse(pre->next);
+        pre->next->next = q;
+        pre->next = temp;
+        head = before->next;
+        delete before;
+        return before->next;
+    }
+private:
+    ListNode* reverse(ListNode *head) {
+        if (NULL == head || NULL == head->next) return head;
+        ListNode *p = reverse(head->next);
+        head->next->next = head;
+        head->next = NULL;
+        return p;
+    }
+};
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseBetween(ListNode* head, int m, int n) {
+        if (m == n) return head;
+        ListNode *before = new ListNode(0);
+        before->next = head;
+        ListNode *p = before;
+        n -= m;
+        while (p && m-- > 1) p = p->next;
+        if (NULL == p || NULL == p->next) return before->next;
+        ListNode *pre = p;
+        while (p && n-- >= 0) p = p->next;
+        if (NULL == p || NULL == p->next) {
+            pre ->next = reverse(pre->next);
+            return before->next;
+        }
+        ListNode *q = p->next;
+        p->next = NULL;
+        ListNode *temp = reverse(pre->next);
+        pre->next->next = q;
+        pre->next = temp;
+        return before->next;
+    }
+private:
+    ListNode* reverse(ListNode *head) {
+        if (NULL == head || NULL == head->next) return head;
+        ListNode *p = reverse(head->next);
+        head->next->next = head;
+        head->next = NULL;
+        return p;
+    }
+};
