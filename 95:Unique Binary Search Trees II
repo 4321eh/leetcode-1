@@ -1,0 +1,43 @@
+//https://leetcode.com/problems/unique-binary-search-trees-ii/
+
+// helper 里面的递归时，忘了加base了。
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<TreeNode*> generateTrees(int n) {
+        return helper(n, 0);
+    }
+    vector<TreeNode*> helper(int n, int base) {
+        vector<TreeNode*> result;
+        if (0 == n) {
+            result.push_back(NULL);
+            return result;
+        }
+        if (1 == n) {
+            result.push_back(new TreeNode(1 + base));
+            return result;
+        }
+        for (int i = 1; i <= n; ++i) {
+            vector<TreeNode*> left = helper(i - 1, 0 + base);
+            vector<TreeNode*> right = helper(n - i, i + base);
+            for (int j = 0; j < left.size(); ++j) {
+                for (int k = 0; k < right.size(); ++k) {
+                    TreeNode *p = new TreeNode(i + base);
+                    p->left = left[j];
+                    p->right = right[k];
+                    result.push_back(p);
+                }
+            }
+        }
+        return result;
+    }
+};
