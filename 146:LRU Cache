@@ -1,0 +1,121 @@
+//https://leetcode.com/problems/lru-cache/
+
+// 下面的这个题，last是不是要指向前一个时，出现了很大的bug！！！！不是用 1 == cap来判断的，
+//当cap不是1，而只有一个元素时，也不要换的
+
+struct ListNode1{
+    int val, key;
+    ListNode1 *pre, *pos;
+    ListNode1(int k, int v): key(k), val(v), pre(NULL), pos(NULL) {}
+};
+class LRUCache{
+public:
+    LRUCache(int capacity) {
+        cap = capacity;
+        before = new ListNode1(-1, 0);
+        last = NULL;
+    }
+    int get(int key) {
+        if (dir.find(key) == dir.end()) return -1;
+        ListNode1 *p = dir[key];
+        moveToHead(p);
+        return p->val;
+    }
+    void set(int key, int value) {
+        if (dir.find(key) != dir.end()) {
+            ListNode1 *p = dir[key];
+            p->val = value;
+            moveToHead(p);
+            return;
+        }
+        if (dir.size() == cap) {
+            dir.erase(last->key);
+            dir[key] = last;
+            last->key = key;
+            last->val = value;
+            moveToHead(last);
+            return;
+        }
+        
+        ListNode1 *p = new ListNode1(key, value);
+        dir[key] = p;
+        p->pos = before->pos;
+        if (p->pos) p->pos->pre = p;
+        p->pre = before;
+        before->pos = p;
+        if (NULL == last) last = p;
+    }
+private:
+    void moveToHead(ListNode1 *p) {
+        if (dir.size() == 1) return;
+        if (p == last) last = last->pre;
+        p->pre->pos = p->pos;
+        if (p->pos) p->pos->pre = p->pre;
+        
+        p->pos = before->pos;
+        if (p->pos) p->pos->pre = p;
+        p->pre = before;
+        before->pos = p;
+    }
+    ListNode1 *before;
+    map<int, ListNode1 *> dir;
+    ListNode1 *last;
+    int cap;
+};
+
+
+struct ListNode1{
+    int val, key;
+    ListNode1 *pre, *pos;
+    ListNode1(int k, int v): key(k), val(v), pre(NULL), pos(NULL) {}
+};
+class LRUCache{
+public:
+    LRUCache(int capacity) {
+        cap = capacity;
+        before = new ListNode1(-1, 0);
+        last = NULL;
+    }
+    int get(int key) {
+        if (dir.find(key) == dir.end()) return -1;
+        ListNode1 *p = dir[key];
+        if (p == last && last && last->pre && last->pre->pre) last = last->pre;
+        p->pre->pos = p->pos;
+        if (p->pos) p->pos->pre = p->pre;
+        
+        p->pos = before->pos;
+        if (p->pos) p->pos->pre = p;
+        p->pre = before;
+        before->pos = p;
+        return p->val;
+    }
+    void set(int key, int value) {
+        if (dir.find(key) != dir.end()) {
+            ListNode1 *p = dir[key];
+            p->val = value;
+            get(key);
+            return;
+        }
+        if (dir.size() == cap) {
+            dir.erase(last->key);
+            dir[key] = last;
+            last->key = key;
+            last->val = value;
+            get(key);
+            return;
+        }
+        
+        ListNode1 *p = new ListNode1(key, value);
+        dir[key] = p;
+        p->pos = before->pos;
+        if (p->pos) p->pos->pre = p;
+        p->pre = before;
+        before->pos = p;
+        if (NULL == last) last = p;
+    }
+private:
+    ListNode1 *before;
+    map<int, ListNode1 *> dir;
+    ListNode1 *last;
+    int cap;
+};
