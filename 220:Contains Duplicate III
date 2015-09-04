@@ -1,0 +1,167 @@
+//https://leetcode.com/problems/contains-duplicate-iii/
+
+
+//写好好久，没有注意，删除提的是root的外理（有注意到了，只是外理不对），
+
+//要注意从右后取最左的节点来补时，要马取到的节点的前节点的左节点指向取节点的右节点
+
+
+
+
+
+
+struct Node{
+    int val,count;
+    Node *left, *right;
+    Node(int v): val(v), count(1), left(NULL), right(NULL){}
+};
+class BST{
+public:
+    BST():root(NULL){}
+    void insert(int val) {
+        if (NULL == root) {
+            root = new Node(val);
+            return;
+        }
+        Node *p = root;
+        while (p) {
+            if (p->val == val) {
+                p->count += 1;
+                return;
+            }
+            if (p->val > val) {
+                if (p->left) {
+                    p = p->left;
+                    continue;
+                }
+                p->left = new Node(val);
+                return;
+            }
+            if (p->right) {
+                p = p->right;
+                continue;
+            }
+            p->right = new Node(val);
+            return;
+        }
+    }
+    Node *getSmall() {
+    }
+    void erase(int val) {
+        Node *p = root;
+        Node *before = NULL;
+        while (p) {
+            if (p->val == val) {
+                if (p->count > 1) {
+                    p->count -= 1;
+                    return;
+                }
+                if (NULL == before) {
+                    if (NULL == p->left && NULL == p->right) {
+                        root = NULL;
+                        return;
+                    }
+                    if (NULL == p->right) {
+                        root = p->left;
+                        return;
+                    }
+                    if (NULL == p->left) {
+                        root = p->right;
+                        return;
+                    }
+                    Node *temp = p->right;
+                    if (NULL == temp->left) {
+                        root->right->left = root->left;
+                        root = root->right;
+                        return;
+                    }
+                    while (temp->left) {
+                        before = temp;
+                        temp = temp->left;
+                    }
+                    before->left = temp->right;
+                    p->val = temp->val;
+                    p->count = temp->count;
+                    return;
+                }
+                if (NULL == p->left && NULL == p->right) {
+                    if (before->left == p) before->left = NULL;
+                    if (before->right == p) before->right = NULL;
+                    return;
+                }
+                if (NULL == p->right) {
+                    p->count = p->left->count;
+                    p->val = p->left->val;
+                    p->right = p->left->right;
+                    p->left = p->left->left;
+                    return;
+                }
+                if (NULL == p->left) {
+                    p->count = p->right->count;
+                    p->val = p->right->val;
+                    p->left = p->right->left;
+                    p->right = p->right->right;
+                    return;
+                }
+                Node *temp = p->right;
+                if (NULL == temp->left) {
+                    p->count = p->right->count;
+                    p->val = p->right->val;
+                    p->right = p->right->right;
+                    return;
+                }
+                while (temp->left) {
+                    before = temp;
+                    temp = temp->left;
+                }
+                before->left = temp->right;
+                p->val = temp->val;
+                p->count = temp->count;
+                return;
+            }
+            before = p;
+            if (p->val > val) {
+                p = p->left;
+                continue;
+            }
+            p = p->right;
+        }
+    }
+    bool search(int val, long long off) {
+        long long up = val + off;
+        long long down = val - off;
+        Node *p = root;
+        while (p) {
+            if (p->val >= down && p->val <= up) return true;
+            if (p->val < down) {
+                p = p->right;
+                continue;
+            }
+            p = p->left;
+        }
+        return false;
+    }
+private:
+    Node *root;
+};
+class Solution {
+public:
+    bool containsNearbyAlmostDuplicate(vector<int>& nums, int k, int t) {
+        if (k < 1 || t < 0) return false;
+        queue<int> q;
+        BST bst;
+        for (int i = 0; i < k && i < nums.size(); ++i) {
+            if (bst.search(nums[i], t)) return true;
+            bst.insert(nums[i]);
+            q.push(nums[i]);
+        }
+        for (int i = k; i < nums.size(); ++i) {
+            if (bst.search(nums[i], t)) return true;
+            bst.erase(q.front());
+            q.pop();
+            bst.insert(nums[i]);
+            q.push(nums[i]);
+        }
+        return false;
+    }
+};
