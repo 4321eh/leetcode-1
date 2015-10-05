@@ -1,0 +1,33 @@
+//https://leetcode.com/problems/number-of-digit-one/
+
+//
+
+
+
+class Solution {
+public:
+    int countDigitOne(int n) {
+        return countDigitK(n, 1);
+    }
+    int countDigitK(int num, int k) {
+        if (num < 0) return 0;
+        int result = 0;
+        int base = 1;
+        int last = 0;
+        int right = 0;
+        while (num) {
+            int digit = num % 10;
+            num /= 10;
+            result += digit * last;
+            if (digit == k) {
+                result += right + 1;
+            } else if (digit > k){
+                result += base;
+            }
+            last = 10 * last + base;
+            right += digit * base;
+            base *= 10;
+        }
+        return result;
+    }
+};
