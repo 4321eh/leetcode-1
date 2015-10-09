@@ -82,3 +82,45 @@ public:
         helper(s, first, last, last - first + 1);
     }
 };
+
+
+class Solution {
+public:
+    void helper(string &s, int first, int last) {
+        char c;
+        while (first < last) {
+            c = s[first];
+            s[first++] = s[last];
+            s[last--] = c;
+        }
+    }
+    void reverseWords(string &s) {
+        int pre = 0;
+        int pos = 0;
+        while (pos < s.length() && ' ' == s[pos]) pos++;
+        while (pos < s.length() && ' ' != s[pos]) s[pre++] = s[pos++];
+        while (pos < s.length()) {
+            if (' ' == s[pos]) {
+                pos++;
+                continue;
+            }
+            s[pre++] = ' ';
+            while (pos < s.length() && ' ' != s[pos]) s[pre++] = s[pos++];
+        }
+        s = s.substr(0, pre);
+        pre = pos = 0;
+        while (pre < s.length()) {
+            if (' ' == s[pre]) {
+                pre = ++pos;
+                continue;
+            }
+            if (s.length() == pos || ' ' == s[pos]) {
+                helper(s, pre, pos - 1);
+                pre = pos;
+                continue;
+            }
+            pos++;
+        }
+        helper(s, 0, pos - 1);
+    }
+};
