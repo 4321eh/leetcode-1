@@ -1,5 +1,45 @@
 //https://leetcode.com/problems/reverse-words-in-a-string/
 
+void reverse(char *first, char *last) {
+    char c;
+    while (first < last) {
+        c = *first;
+        *first++ = *last;
+        *last-- = c;
+    }
+}
+void reverseWords(char *s) {
+    if (NULL == s) return;
+    char *beg = s;
+    char *end = s;
+    while ('\0' != *end && ' ' == *end) end++;
+    while ('\0' != *end && ' ' != *end) *beg++ = *end++;
+    while ('\0' != *end) {
+        if (' ' == *end) {
+            end++;
+            continue;
+        }
+        *beg++ = ' ';
+        while ('\0' != *end && ' ' != *end) *beg++ = *end++;
+    }
+    *beg = '\0';
+    beg = end = s;
+    while ('\0' != *beg) {
+        if (' ' == *beg) {
+            beg = ++end;
+            continue;
+        }
+        if (' ' == *end || '\0' == *end) {
+            reverse(beg, --end);
+            beg = ++end;
+            continue;
+        }
+        end++;
+    }
+    reverse(s, --end);
+}
+
+
 // 最重要的错：helper没有想到内存重叠的情况
 //
 //还有好多case没想到
