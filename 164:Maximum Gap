@@ -13,7 +13,6 @@ public:
             max_value = max(max_value, nums[i]);
             min_value = min(min_value, nums[i]);
         }
-        if (max_value == min_value) return 0;
         int bucket_gap = (max_value - min_value) / nums.size() + 1;
         vector<pair<int,int> > buckets(nums.size() + 1, make_pair(0, -1));
         for (int i = 0; i < nums.size(); ++i) {
