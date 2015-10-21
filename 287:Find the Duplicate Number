@@ -1,0 +1,21 @@
+//https://leetcode.com/problems/find-the-duplicate-number/
+//
+//太牛逼了。！
+
+class Solution {
+public:
+    int findDuplicate(vector<int>& nums) {
+        int first = 0;
+        int last = 0;
+        do {
+            first = nums[nums[first]];
+            last = nums[last];
+        } while (first != last);
+        first = 0;
+        do {
+            first = nums[first];
+            last = nums[last];
+        } while (first != last);
+        return first;
+    }
+};
