@@ -1,0 +1,31 @@
+//https://leetcode.com/problems/search-in-rotated-sorted-array-ii/
+
+// 都不知是不最简单的
+
+
+class Solution {
+public:
+    bool helper(vector<int> &nums, int first, int last, int target) {
+        if (first <= last) {
+            if (nums[first] < nums[last]) {
+                while (first <= last) {
+                    int m = (first + last) / 2;
+                    if (nums[m] == target) return true;
+                    if (nums[m] < target) {
+                        first = m + 1;
+                        continue;
+                    }
+                    last = m - 1;
+                }
+                return false;
+            }
+            int mid = (first + last) / 2;
+            if (nums[mid] == target) return true;
+            return helper(nums, first, mid - 1, target) || helper(nums, mid + 1, last, target);
+        }
+        return false;
+    }
+    bool search(vector<int>& nums, int target) {
+        return helper(nums, 0, nums.size() - 1, target);
+    }
+};
