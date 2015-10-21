@@ -1,0 +1,19 @@
+//https://leetcode.com/problems/rectangle-area/
+
+
+
+
+class Solution {
+public:
+    int area(int A, int B, int C, int D) {return abs(A - C) * abs(B - D);}
+    int computeArea(int A, int B, int C, int D, int E, int F, int G, int H) {
+        int result = area(A, B, C, D) + area(E, F, G, H);
+        A = max(A, E);
+        B = max(B, F);
+        C = min(C, G);
+        D = min(D, H);
+        if (A <= C && B <= D) 
+            result -= area(A, B, C, D);
+        return result;
+    }
+};
