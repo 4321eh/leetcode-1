@@ -1,0 +1,85 @@
+//https://leetcode.com/problems/basic-calculator-ii/
+
+
+/*
+   注意下面的while
+            if ('+' == s[i] || '-' == s[i]) {
+                while (not op.empty() && (op.top() == '+' ||op.top() == '-' ||op.top() == '*' ||op.top() == '/')) {
+                    calc(op.top(), num);
+                    op.pop();
+                }
+                op.push(s[i]);
+                continue;
+            }
+*/
+
+
+class Solution {
+public:
+   void calc(char op, stack<int> &num) {
+        int num2 = num.top();
+        num.pop();
+        int num1 = num.top();
+        num.pop();
+        if ('+'== op)  num1 += num2;
+        if ('-' == op) num1 -= num2;
+        if ('*' == op) num1 *= num2;
+        if ('/' == op) num1 /= num2;
+        num.push(num1);
+    }
+    int calculate(string s) {
+        stack<char> op;
+        stack<int> num;
+        for (int i = 0; i < s.length(); ++i) {
+            if (' ' == s[i]) continue;
+            if ('(' == s[i]) {
+                op.push(s[i]);
+                continue;
+            }
+            if (')' == s[i]) {
+                while (not op.empty()) {
+                    if (op.top() == '(') {
+                        op.pop();
+                        break;
+                    };
+                    calc(op.top(), num);
+                    op.pop();
+                }
+                continue;
+            }
+            if ('+' == s[i] || '-' == s[i]) {
+                while (not op.empty() && (op.top() == '+' ||op.top() == '-' ||op.top() == '*' ||op.top() == '/')) {
+                    calc(op.top(), num);
+                    op.pop();
+                }
+                op.push(s[i]);
+                continue;
+            }
+            if ('*' == s[i] || '/' == s[i]) {
+                if (not op.empty() && (op.top() == '/' ||op.top() == '*')) {
+                    calc(op.top(), num);
+                    op.pop();
+                }
+                op.push(s[i]);
+                continue;
+            }
+            for (int j = i; j < s.length(); ++j) {
+                if (s[j] > '9' || s[j] < '0') {
+                    num.push(atoi(s.substr(i, j - i).c_str()));
+                    i = j - 1;
+                    break;
+                }
+                if (s.length() - 1 == j) {
+                    num.push(atoi(s.substr(i, j - i + 1).c_str()));
+                    i = j;
+                    break;
+                }
+            }
+        }
+        while (not op.empty()) {
+            calc(op.top(), num);
+            op.pop();
+        }
+        return num.top();
+    }
+};
