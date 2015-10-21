@@ -1,0 +1,42 @@
+//https://leetcode.com/problems/copy-list-with-random-pointer/
+
+// 特别要注意是下面的这里，要画好图，一步步做出来
+/*
+          p = p->next = p->next->next;
+          if (p) newP = newP->next = p->next
+*/
+
+/**
+ * Definition for singly-linked list with a random pointer.
+ * struct RandomListNode {
+ *     int label;
+ *     RandomListNode *next, *random;
+ *     RandomListNode(int x) : label(x), next(NULL), random(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    RandomListNode *copyRandomList(RandomListNode *head) {
+        if (NULL == head) return head;
+        RandomListNode *p = head;
+        while (p) {
+            RandomListNode *temp = new RandomListNode(p->label);
+            temp->next = p->next;
+            p->next = temp;
+            p = temp->next;
+        }
+        p = head;
+        while (p && p->next) {
+            if (p->random) p->next->random = p->random->next;
+            p = p->next->next;
+        }
+        p = head;
+        RandomListNode *newHead = p->next;
+        RandomListNode *newP = newHead;
+        while (p && p->next) {
+            p = p->next = p->next->next;
+            if (p) newP = newP->next = p->next;
+        }
+        return newHead;
+    }
+};
