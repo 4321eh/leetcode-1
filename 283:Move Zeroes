@@ -1,0 +1,40 @@
+//
+
+/*
+  下面这样写会有死循环的！
+        while (j < nums.size()) {
+            if (0 != nums[j]) {
+                int n = nums[j];
+                nums[j++] = nums[i];
+                nums[i++] = n;
+            }
+        }
+*/
+
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+        int i;
+        int j;
+        i = j = 0;
+        while (j < nums.size()) {
+            if (0 != nums[j]) {
+                int n = nums[j];
+                nums[j++] = nums[i];
+                nums[i++] = n;
+                continue;
+            }
+            j++;
+        }
+    }
+    void moveZeroes2(vector<int>& nums) {
+        int i = 0;
+        for (int j = 0; j < nums.size(); ++j) {
+            if (0 != nums[j]) {
+                int n = nums[j];
+                nums[j] = nums[i];
+                nums[i++] = n;
+            }
+        }
+    }
+};
