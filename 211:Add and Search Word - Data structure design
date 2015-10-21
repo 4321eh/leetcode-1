@@ -1,0 +1,66 @@
+//https://leetcode.com/problems/add-and-search-word-data-structure-design/
+
+
+// trie 树，注意isEnd
+
+
+
+struct TrieNode {
+    char val;
+    bool isEnd;
+    vector<TrieNode *> child;
+    TrieNode(char c):val(c), isEnd(false) {};
+    TrieNode():isEnd(false) {};
+};
+class WordDictionary {
+public:
+
+    // Adds a word into the data structure.
+    void addWord(string word) {
+        TrieNode *p = &before;
+        for (int i = 0; i < word.length(); ++i) {
+            bool flag = false;
+            for (int j = 0; j < p->child.size(); ++j) {
+                TrieNode *temp = p->child[j];
+                if (temp->val == word[i]) {
+                    p = temp;
+                    temp->isEnd |= (word.length() - 1 == i);
+                    flag = true;
+                    break;
+                }
+            }
+            if (flag) continue;
+            TrieNode *temp = new TrieNode(word[i]);
+            temp->isEnd = (word.length() - 1 == i);
+            p->child.push_back(temp);
+            p = temp;
+        }
+    }
+
+    // Returns if the word is in the data structure. A word could
+    // contain the dot character '.' to represent any one letter.
+    bool search(string word) {
+        return helper(&before, word, 0);
+    }
+    WordDictionary() {};
+private:
+    TrieNode before;
+    bool helper(TrieNode *p, string &word, int k) {
+        if (word.length() == k) return p->isEnd;
+        if ('.' == word[k]) {
+            for (int i = 0; i < p->child.size(); ++i) {
+                if (helper(p->child[i], word, k + 1)) return true;
+            }
+            return false;
+        }
+        for (int i = 0; i < p->child.size(); ++i) {
+            if (p->child[i]->val == word[k]) return helper(p->child[i], word, k + 1);
+        }
+        return false;
+    }
+};
+
+// Your WordDictionary object will be instantiated and called as such:
+// WordDictionary wordDictionary;
+// wordDictionary.addWord("word");
+// wordDictionary.search("pattern");
