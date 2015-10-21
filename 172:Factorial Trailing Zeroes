@@ -1,0 +1,17 @@
+
+
+//https://leetcode.com/problems/factorial-trailing-zeroes/
+
+//重要的是思想！！！
+
+class Solution {
+public:
+    int trailingZeroes(int n) {
+        int result = 0;
+        while (n) {
+            n /= 5;
+            result += n;
+        }
+        return result;
+    }
+};
