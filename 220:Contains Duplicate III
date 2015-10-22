@@ -174,7 +174,6 @@ public:
 
 
 
-
 struct Node{
     int val,count;
     Node *left, *right;
@@ -216,7 +215,7 @@ private:
         if (root->val > val) root->left = eraseHelper(root->left, val);
         if (root->val < val) root->right = eraseHelper(root->right, val);
         if (root->val == val && root->count == 1) return deleteNode(root);
-        root->count -= 1;
+        if (root->val == val && root->count > 1) root->count -= 1;
         return root;
     }
     Node *deleteNode(Node *root) {
