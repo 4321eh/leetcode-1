@@ -1,0 +1,32 @@
+//https://leetcode.com/problems/word-search/
+
+class Solution {
+public:
+    bool exist(vector<vector<char>>& board, string word) {
+        if (board.size() && board.size() * board[0].size() < word.length())
+            return false;
+        for (int i = 0; i < board.size(); ++i) {
+            for (int j = 0; j < board[0].size(); ++j) {
+                if (helper(board, i, j, word, 0))
+                    return true;
+            }
+        }
+        return false;
+    }
+    bool helper(vector<vector<char>>& board, int i, int j, string &word, int k) {
+        if (word.length() == k) return true;
+        if (i < 0 || i >= board.size()) return false;
+        if (j < 0 || j >= board[0].size()) return false;
+        if (board[i][j] != word[k]) return false;
+        int x[] = {1, -1,  0,  0};
+        int y[] = {0,  0, -1,  1};
+        char c = board[i][j];
+        board[i][j] = '*';
+        for (int dir = 0; dir < 4; ++dir) {
+            if (helper(board, i + x[dir], j + y[dir], word, k + 1))
+                return true;
+        }
+        board[i][j] = c;
+        return false;
+    }
+};
