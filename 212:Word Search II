@@ -1,0 +1,70 @@
+
+//https://leetcode.com/problems/word-search-ii/
+
+// trie 树！！！
+
+struct TrieNode {
+    char val;
+    bool isEnd;
+    vector<TrieNode *> child;
+    TrieNode(char c):val(c), isEnd(false) {};
+    TrieNode():isEnd(false) {};
+};
+class Solution {
+public:
+    vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
+        vector<string> result;
+        for (int i = 0; i < words.size(); ++i) {
+            addWord(words[i]);
+        }
+        for (int i = 0; i < board.size(); ++i) {
+            for (int j = 0; j < board[0].size(); ++j) {
+                helper(board, i, j, "", &before, result);
+            }
+        }
+        return result;
+    }
+    void helper(vector<vector<char>>& board, int i, int j, string str, TrieNode *p, vector<string> &result) {
+        if (p->isEnd) {
+            result.push_back(str);
+            p->isEnd = false;
+        }
+        if (i < 0 || i >= board.size()) return ;
+        if (j < 0 || j >= board[0].size()) return ;
+        int x[] = {1, -1,  0,  0};
+        int y[] = {0,  0, -1,  1};
+        for (int k = 0; k < p->child.size(); ++k) {
+            if (board[i][j] != p->child[k]->val) continue;
+            char c = board[i][j];
+            board[i][j] = '*';
+            for (int dir = 0; dir < 4; ++dir) {
+                helper(board, i + x[dir], j + y[dir], str + c, p->child[k], result);
+            }
+            board[i][j] = c;
+        }
+    }
+    // Adds a word into the data structure.
+    void addWord(string word) {
+        TrieNode *p = &before;
+        for (int i = 0; i < word.length(); ++i) {
+            bool flag = false;
+            for (int j = 0; j < p->child.size(); ++j) {
+                TrieNode *temp = p->child[j];
+                if (temp->val == word[i]) {
+                    p = temp;
+                    temp->isEnd |= (word.length() - 1 == i);
+                    flag = true;
+                    break;
+                }
+            }
+            if (flag) continue;
+            TrieNode *temp = new TrieNode(word[i]);
+            temp->isEnd = (word.length() - 1 == i);
+            p->child.push_back(temp);
+            p = temp;
+        }
+    }
+    Solution() {};
+private:
+    TrieNode before;
+};
