@@ -6,7 +6,7 @@
 //要注意从右后取最左的节点来补时，要马取到的节点的前节点的左节点指向取节点的右节点
 
 
-
+//最后面有增强简单版
 
 
 
@@ -142,6 +142,103 @@ public:
         return false;
     }
 private:
+    Node *root;
+};
+class Solution {
+public:
+    bool containsNearbyAlmostDuplicate(vector<int>& nums, int k, int t) {
+        if (k < 1 || t < 0) return false;
+        queue<int> q;
+        BST bst;
+        for (int i = 0; i < k && i < nums.size(); ++i) {
+            if (bst.search(nums[i], t)) return true;
+            bst.insert(nums[i]);
+            q.push(nums[i]);
+        }
+        for (int i = k; i < nums.size(); ++i) {
+            if (bst.search(nums[i], t)) return true;
+            bst.erase(q.front());
+            q.pop();
+            bst.insert(nums[i]);
+            q.push(nums[i]);
+        }
+        return false;
+    }
+};
+
+
+
+
+
+
+
+
+
+
+struct Node{
+    int val,count;
+    Node *left, *right;
+    Node(int v): val(v), count(1), left(NULL), right(NULL){}
+};
+class BST{
+public:
+    BST():root(NULL){}
+    void insert(int val) {
+        root = insertHelper(root, val);
+    }
+    void erase(int val) {
+        root = eraseHelper(root, val);
+    }
+    bool search(int val, long long off) {
+        long long up = val + off;
+        long long down = val - off;
+        Node *p = root;
+        while (p) {
+            if (p->val >= down && p->val <= up) return true;
+            if (p->val < down) {
+                p = p->right;
+                continue;
+            }
+            p = p->left;
+        }
+        return false;
+    }
+private:
+    Node *insertHelper(Node *root, int val) {
+        if (NULL == root) return new Node(val);
+        if (root->val > val) root->left = insertHelper(root->left, val);
+        if (root->val < val) root->right = insertHelper(root->right, val);
+        if (root->val == val) root->count += 1;
+        return root;
+    }
+    Node *eraseHelper(Node *root, int val) {
+        if (NULL == root) return root;
+        if (root->val > val) root->left = eraseHelper(root->left, val);
+        if (root->val < val) root->right = eraseHelper(root->right, val);
+        if (root->val == val && root->count == 1) return deleteNode(root);
+        root->count -= 1;
+        return root;
+    }
+    Node *deleteNode(Node *root) {
+        if (NULL == root->left && NULL == root->right) return NULL;
+        if (NULL != root->left) return root->left;
+        if (NULL != root->right) return root->right;
+        Node *p = adjustUp(root->right);
+        p->left = root->left;
+        return p;
+    }
+    Node *adjustUp(Node *root) {
+        if (NULL == root) return root;
+        root->left = adjustUp(root->left);
+        if (NULL != root->left) root = rotateRight(root);
+        return root;
+    }
+    Node *rotateRight(Node *root) {
+        Node *p = root->left;
+        root->left = p->right;
+        p->right = root;
+        return p;
+    }
     Node *root;
 };
 class Solution {
