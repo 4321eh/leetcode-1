@@ -1,0 +1,32 @@
+//https://leetcode.com/problems/distinct-subsequences/
+
+//http://www.tuicool.com/articles/6BZRJf
+
+/*
+这道题应该很容易感觉到是动态规划的题目。还是老套路，先考虑我们要维护什么量。这里我们维护res[i][j]，
+对应的值是S的前i个字符和T的前j个字符有多少个可行的序列（注意这道题是序列，不是子串，
+也就是只要字符按照顺序出现即可，不需要连续出现）。下面来看看递推式，假设我们现在拥有之前的历史信息，
+我们怎么在常量操作时间内得到res[i][j]。假设S的第i个字符和T的第j个字符不相同，
+那么就意味着res[i][j]的值跟res[i-1][j]是一样的，前面该是多少还是多少，
+而第i个字符的加入也不会多出来任何可行结果。如果S的第i个字符和T的第j个字符相同，
+那么所有res[i-1][j-1]中满足的结果都会成为新的满足的序列，当然res[i-1][j]的也仍是可行结果，
+所以res[i][j]=[i-1][j-1]+res[i-1][j]。所以综合上面两种情况，
+递推式应该是res[i][j]=(S[i]==T[j]?res[i-1][j-1]:0)+res[i][j]。算法进行两层循环，时间复杂度是O(m*n)，
+而空间上只需要维护当前i对应的数据就可以，也就是O(m)
+*/
+
+class Solution {
+public:
+    int numDistinct(string s, string t) {
+        if (t.length() < 1) return 1;
+        if (s.length() < 1) return 0;
+        vector<int> dp(t.length() + 1, 0);
+        dp[0] = 1;
+        for (int i = 0; i < s.length(); ++i) {
+            for (int j = t.length() - 1; j >= 0; --j) {
+                dp[j + 1] += (s[i] == t[j])? dp[j] : 0;
+            }
+        }
+        return dp[t.length()];
+    }
+};
