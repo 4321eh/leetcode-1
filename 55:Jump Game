@@ -1,0 +1,41 @@
+//https://leetcode.com/problems/jump-game/
+
+//有时真的很二
+
+class Solution {
+public:
+    bool canJump(vector<int>& nums) {
+        if (nums.size() < 2) return true;
+        int last_max = 0;
+        for (int i = 0; i < nums.size(); ++i) {
+            if (last_max < i) return false;
+            last_max = max(last_max, i + nums[i]);
+        }
+        return true;
+    }
+};
+
+/*以下是吃力不讨好，而且是不对的做法！！！
+class Solution {
+public:
+    bool canJump(vector<int>& nums) {
+        if (nums.size() < 2) return true;
+        int max_left = nums[0];
+        int last_pos = 0;
+        while (max_left < nums.size()) {
+            int max_cur = last_pos;
+            for (int i = last_pos; i < max_left && i < nums.size(); ++i) {
+                max_cur = max(max_cur, i + nums[i]);
+            }
+            if (max_cur > max_left) {
+                last_pos = max_left;
+                max_left = max_cur;
+                continue;
+            }
+            return false;
+        }
+        return max_left >= nums.size();
+    }
+};
+
+*/
