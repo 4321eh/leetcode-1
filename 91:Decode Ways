@@ -1,0 +1,50 @@
+//https://leetcode.com/problems/decode-ways/
+
+//两种方法，第一种是最好的，把那些所有的情况都放到了循环里面！！！
+
+class Solution {
+public:
+    bool isValid(char one, char two) {
+        if ('0' == one) return false;
+        if (one < '2') return true;
+        return (one < '3' && two < '7');
+    }
+    int numDecodings(string s) {
+        if (s.length() < 1 || '0' == s[0]) return 0;
+        int last_two = 1;
+        int last_one = 1;
+        for (int i = 1; i < s.length(); ++i) {
+            int temp = ('0' != s[i]) ? last_one : 0;
+            temp += isValid(s[i - 1], s[i]) ? last_two : 0;
+            if (0 == temp) return 0;
+            last_two = last_one;
+            last_one = temp;
+        }
+        return last_one;
+    }
+};
+
+
+class Solution {
+public:
+    bool isValid(char one, char two) {
+        if ('0' == one) return false;
+        if (one < '2') return true;
+        return (one < '3' && two < '7');
+    }
+    int numDecodings(string s) {
+        if (s.length() < 1) return 0;
+        int last_two = ('0' != s[0]);
+        if (s.length() < 2) return last_two;
+        int last_one = isValid(s[0], s[1]) + ('0' != s[1]);
+        if (0 == last_two || 0 == last_one) return 0;
+        for (int i = 2; i < s.length(); ++i) {
+            int temp = ('0' != s[i]) ? last_one : 0;
+            temp += isValid(s[i - 1], s[i]) ? last_two : 0;
+            if (0 == temp) return 0;
+            last_two = last_one;
+            last_one = temp;
+        }
+        return last_one;
+    }
+};
