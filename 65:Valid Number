@@ -1,0 +1,153 @@
+//https://leetcode.com/problems/valid-number/
+
+// 抄来的
+
+//http://blog.csdn.net/suwei19870312/article/details/12094233
+
+
+class Solution
+{
+public:
+    bool isNumber(string s) {
+        enum InputType
+        {
+            INVALID,    // 0
+            SPACE,      // 1
+            SIGN,       // 2
+            DIGIT,      // 3
+            DOT,        // 4
+            EXPONENT,   // 5
+            NUM_INPUTS  // 6
+        };
+        
+        int transitionTable[][NUM_INPUTS] =
+        {
+            -1,  0,  3,  1,  2, -1,     // next states for state 0
+            -1,  8, -1,  1,  4,  5,     // next states for state 1
+            -1, -1, -1,  4, -1, -1,     // next states for state 2
+            -1, -1, -1,  1,  2, -1,     // next states for state 3
+            -1,  8, -1,  4, -1,  5,     // next states for state 4
+            -1, -1,  6,  7, -1, -1,     // next states for state 5
+            -1, -1, -1,  7, -1, -1,     // next states for state 6
+            -1,  8, -1,  7, -1, -1,     // next states for state 7
+            -1,  8, -1, -1, -1, -1,     // next states for state 8
+        };
+        
+        int state = 0;
+        for (int i = 0; i < s.length(); ++i) {
+            InputType inputType = INVALID;
+            if (s[i] == ' ')
+                inputType = SPACE;
+            else if (s[i] == '+' || s[i] == '-')
+                inputType = SIGN;
+            else if (isdigit(s[i]))
+                inputType = DIGIT;
+            else if (s[i] == '.')
+                inputType = DOT;
+            else if (s[i] == 'e' || s[i] == 'E')
+                inputType = EXPONENT;
+            state = transitionTable[state][inputType];
+            if (state == -1) break;
+        }
+        
+        return state == 1 || state == 4 || state == 7 || state == 8;
+    }
+};
+
+//下面是错解
+
+/*
+
+class Solution {
+public:
+    string trim(string s) {
+        int i = 0;
+        int j = s.length() - 1;
+        while (i < j && ' ' == s[i]) i++;
+        while (i < j && ' ' == s[j]) j--;
+        return s.substr(i, j - i + 1);
+    }
+    bool split(string s, char c, string &first, string &second) {
+        int i = 0;
+        while (i < s.length() && c != s[i]) i++;
+        first = s.substr(0, i);
+        if (0 == i) return false;
+        if (s.length() == i++) {
+            second = "";
+            return true;
+        }
+        second = s.substr(i, s.length());
+        while (i < s.length() && c != s[i]) i++;
+        return s.length() == i;
+    }
+    bool isNumber(string s) {
+        s = trim(s);
+        string str_e_left, str_e_right;
+        if (not split(s, 'e', str_e_left, str_e_right)) return false;
+        
+    }
+};
+
+class Solution {
+public:
+    string strip(string s) {
+        int i = 0;
+        int j = s.length() - 1;
+        while (i < s.length() && ' ' == s[i]) i += 1;
+        while (j >= 0 && ' ' == s[j]) j -= 1;
+        if (i > j) return "";
+        return s.substr(i, j - i + 1);
+    }
+    bool digitCheck(string s) {
+        if (s.length() < 1) return false;
+        int e_count = 0;
+        int dot_count = 0;
+        int flag = 0;
+        for (int i = 0; i < s.length(); ++i) {
+            if ('+' == s[i] || '-' == s[i]) {
+                flag += 1;
+                continue;
+            }
+            if (s[i] >= '0' && s[i] <= '9')
+                continue;
+            if ('e' == s[i]) {
+                e_count += 1;
+                continue;
+            }
+            if ('.' == s[i]) {
+                dot_count += 1;
+                continue;
+            }
+            return false;
+        }
+        return e_count + dot_count < 2;
+    }
+    int getEorDot(string s) {
+        for (int i = 0; i < s.length(); ++i) {
+            if ('.' == s[i] || 'e' == s[i])
+                return i;
+        }
+        return s.length();
+    }
+    bool isNumber(string s) {
+        // 11
+        // 1.
+        // ./
+        // .
+        // e
+        // 1e1
+        // e1
+        // 1e
+        // +- 正负号
+        s = strip(s);
+        if (not digitCheck(s)) return false;
+        int e_or_dot = getEorDot(s);
+        if (e_or_dot < s.length() && '.' == s[e_or_dot]) return s.length() > 1;
+        if (s.length() - 1 == e_or_dot || 0 == e_or_dot) return false;
+        //if (s.length() == e_or_dot) return true;
+        return true;
+    }
+};
+
+
+*/
