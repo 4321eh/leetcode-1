@@ -1,0 +1,34 @@
+//https://leetcode.com/problems/word-pattern/
+
+//下面这三句话要注意！！！
+// if (' ' == str[i] || str.length() == i + 1)
+//string word = str.substr(last, i - last + (str.length() == i + 1));
+// count == pattern.length()
+
+class Solution {
+public:
+    bool wordPattern(string pattern, string str) {
+       map<char, string> pattern_str;
+       map<string, char> str_pattern;
+       int last = 0;
+       int count = 0;
+       for (int i = 0; i < str.length(); ++i) {
+           if (' ' == str[i] || str.length() == i + 1) {
+               if (count >= pattern.length()) return false;
+               string word = str.substr(last, i - last + (str.length() == i + 1));
+               if (str_pattern.find(word) == str_pattern.end())
+                   str_pattern[word] = pattern[count];
+               if (str_pattern[word] != pattern[count]) 
+                   return false;
+               if (pattern_str.find(pattern[count]) == pattern_str.end())
+                   pattern_str[pattern[count]] = word;
+               if (pattern_str[pattern[count]] != word)
+                   return false;
+               count += 1;
+               last = i + 1;
+               continue;
+           }
+       }
+       return count == pattern.length();
+    }
+};
