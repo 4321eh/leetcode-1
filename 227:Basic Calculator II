@@ -83,3 +83,58 @@ public:
         return num.top();
     }
 };
+
+/*
+if (' ' == s[i]) {
+      i += 1;
+      continue;
+  }
+  
+  错写成了:
+  if (' ' == s[i]) continue;
+  
+  一个工作，就这样就没了。
+*/
+
+
+
+int atoi(string &s, int &i) {
+    while (i < s.length() && ' ' == s[i]) i += 1;
+    int result = 0;
+    while (i < s.length() && s[i] >= '0' && s[i] <= '9') {
+        result *= 10;
+        result += (s[i] - '0');
+        i += 1;
+    }
+    return result;
+}
+int cal(string s) {
+    s += "+";
+    int i = 0;
+    long long result = 0;
+    long long num = atoi(s, i);
+    long long temp;
+    long long sign = 1;
+    char op;
+
+    while (i < s.length()) {
+        if (' ' == s[i]) {
+            i += 1;
+            continue;
+        }
+        op = s[i++];
+        if ('+' == op || '-' == op) {
+            result += sign * num;
+            sign = ('+' == op) ? 1 : -1;
+            num = atoi(s, i);
+            continue;
+        }
+        temp = atoi(s, i);
+        if ('*' == op) {
+            num *= temp;
+            continue;
+        }
+        num /= temp;
+    }
+    return result;
+}
